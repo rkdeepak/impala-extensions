@@ -1,0 +1,67 @@
+package org.impalaframework.extension.event;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.impalaframework.util.ExceptionUtils;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.util.Assert;
+
+public class RecordingEventTask extends EventTask {
+	
+	private static final Log logger = LogFactory.getLog(RecordingEventTask.class);
+	
+	private final PlatformTransactionManager transactionManager;
+
+	private final EventDAO eventDAO;
+
+	public RecordingEventTask(PlatformTransactionManager transactionManager, EventDAO eventDAO, EventSynchronizer eventSynchronizer,
+			Event Event, EventListener eventListener) {
+		super(eventSynchronizer, Event, eventListener);
+		Assert.notNull(transactionManager);
+		Assert.notNull(eventDAO);
+		this.transactionManager = transactionManager;
+		this.eventDAO = eventDAO;
+	}
+
+	@Override
+	public void run() {
+
+		if (!getEventListener().getMarkProcessed()) {
+			super.run();
+		}
+		else {
+			String errorText = null;
+			try {
+				super.run();
+			}
+			catch (Throwable error) {
+				errorText = ExceptionUtils.getStackTrace(error);
+			}
+
+			doStatusRecording(getEvent().getEventId(), getEventListener().getConsumerName(), errorText);
+		}
+
+	}
+
+	void doStatusRecording(final String eventId, final String consumer, final String error) {
+		try {
+			new TransactionTemplate(transactionManager).execute(new TransactionCallback() {
+
+				public Object doInTransaction(TransactionStatus status) {
+					if (error != null) {
+						eventDAO.insertFailedEvent(eventId, consumer, error);
+					} else {
+						eventDAO.insertProcessedEvent(eventId, consumer);
+					}
+					return null;
+				}});
+		}
+		catch (Exception e) {
+			logger.error("Event " + eventId + " processed by consumer " + consumer + " but unable to record this in the ProcessedEvent table");
+		}
+	}
+
+}

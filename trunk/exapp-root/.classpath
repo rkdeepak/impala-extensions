@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="src" path="resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="/repository/main/impala-build-SNAPSHOT.jar" sourcepath="/repository/main/impala-build-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/repository/main/impala-command-SNAPSHOT.jar" sourcepath="/repository/main/impala-command-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/repository/main/impala-core-SNAPSHOT.jar" sourcepath="/repository/main/impala-core-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/repository/main/impala-jmx-SNAPSHOT.jar" sourcepath="/repository/main/impala-jmx-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/repository/main/impala-interactive-SNAPSHOT.jar" sourcepath="/repository/main/impala-interactive-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/repository/main/commons-logging-1.1.jar" sourcepath="/repository/test/commons-logging-1.1-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/repository/main/log4j-1.2.13.jar" sourcepath="/repository/main/log4j-1.2.13.jar"/>
+	<classpathentry exported="true" kind="lib" path="/repository/main/spring-2.5.5.jar" sourcepath="/repository/main/spring-2.5.5-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/repository/test/junit-3.8.1.jar" sourcepath="/repository/test/junit-3.8.1-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/repository/test/easymock-2.2.jar" sourcepath="/repository/test/easymock-2.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/repository/test/easymockclassextension-2.2.jar" sourcepath="/repository/test/easymockclassextension-2.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/repository/main/cglib-nodep-2.1_3.jar" sourcepath="/repository/test/cglib-nodep-2.1_3-sources.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
