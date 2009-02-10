@@ -5,13 +5,20 @@ import java.util.List;
 
 public class TestEventListener implements EventListener {
 
+	private String name;
+	
+	public TestEventListener(String name) {
+		super();
+		this.name = name;
+	}
+
 	private List<Event> eventList = new ArrayList<Event>();
 	
 	private boolean markProcessed;
 	
 	public synchronized void onEvent(Event event) {
 		try {
-			Thread.sleep(100);
+			Thread.sleep(50);
 		} catch (InterruptedException e) {
 		}
 		eventList.add(event);
@@ -26,7 +33,7 @@ public class TestEventListener implements EventListener {
 	}
 
 	public String getConsumerName() {
-		return "test";
+		return name;
 	}
 	
 	public void setMarkProcessed(boolean markProcessed) {

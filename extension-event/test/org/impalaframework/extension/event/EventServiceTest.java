@@ -24,70 +24,70 @@ public class EventServiceTest extends TestCase {
 	
 	public void testAsynchronous() throws InterruptedException {
 
-		AsynchronousEventService manager = new AsynchronousEventService() {
+		AsynchronousEventService service = new AsynchronousEventService() {
 
 			@Override
-			protected void consumeEvent() {
+			protected void consumeQueuedEvent() {
 				try {
 					//put in a small delay to prevent the race condition described below
 					Thread.sleep(5);
 				} catch (InterruptedException e) {
 				}
-				super.consumeEvent();
+				super.consumeQueuedEvent();
 			}
 			
 		};
 		
 		DefaultEventListenerRegistry registry = new DefaultEventListenerRegistry();
-		manager.setEventListenerRegistry(registry);
+		service.setEventListenerRegistry(registry);
 		SimpleEventSynchronizer eventSynchronizer = new SimpleEventSynchronizer();
-		manager.setEventSynchronizer(eventSynchronizer);
-		manager.setEventTaskFactory(new SimpleEventTaskFactory(eventSynchronizer));
+		service.setEventSynchronizer(eventSynchronizer);
+		service.setEventTaskFactory(new SimpleEventTaskFactory());
 		
 		Event[] events = Event();
 		TestEventListener[] listeners = EventTestUtils.listeners();
 
 		EventTestUtils.registerListeners(registry, listeners);
 		
-		manager.start();
+		service.start();
 		
 		Thread.sleep(1000);
 		
-		submitEvents(manager, events);
+		submitEvents(service, events);
 		
 		//have to watch out for a race condition here as it is theoretically
 		//possible for all four events to be executed before this can be handled
-		assertTrue(manager.getEventQueueSize() > 0);
+		assertTrue(service.getEventQueueSize() > 0);
 		
 		//wait a little while, to allow the events to be processed
 		Thread.sleep(500);
 		
 		EventTestUtils.checkListeners(listeners);
 		
-		assertEquals(0, manager.getEventQueueSize());
+		assertEquals(0, service.getEventQueueSize());
 		
 		//still active
-		assertTrue(manager.isActive());
+		assertTrue(service.isActive());
 
 		assertEquals(3, registry.getListenerCount());
 		
 		//now shut down
-		manager.stop();
+		service.stop();
 		assertEquals(0, registry.getListenerCount());
 		
 		//check is stopped
-		assertTrue(manager.isStopped());
+		assertTrue(service.isStopped());
 		
 		try {
-			manager.submitEvent(events[0]);
+			service.submitEvent(events[0]);
 		}
 		catch (IllegalStateException e) {
 			assertEquals("Cannot accept events as event manager has stopped", e.getMessage());
 		}
 		
 		//now restart
-		manager.start();
-		assertTrue(manager.isActive());
+		service.start();
+		assertTrue(service.isActive());
 	}
 
 	private void submitEvents(EventService manager, Event[] events) {
@@ -108,7 +108,7 @@ public class EventServiceTest extends TestCase {
 
 		Event event1 = new Event(lowPriority, "1", 1L, "mytype");
 		Event event2 = new Event(highPriority,  "2", 2L, "mytype");
-		Event event3 = new Event(anotherType, "3", 3L, "mytype");
+		Event event3 = new Event(anotherType, "3", 3L, "anothertype");
 		Event event4 = new Event(irrelevantType,  "4", 4L, "mytype");
 		
 		Event[] Event = new Event[] { event1, event2, event3, event4 };
