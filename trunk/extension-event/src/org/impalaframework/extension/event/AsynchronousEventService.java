@@ -22,8 +22,6 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 
 	private ExecutorService queueExecutorService;
 
-	private ExecutorService taskExecutorService;
-
 	private EventListenerRegistry eventListenerRegistry;
 	
 	private EventTaskFactory eventTaskFactory;
@@ -35,6 +33,7 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 	/* ******************** EventService interface method ****************** */
 
 	public void submitEvent(Event event) {
+		
 		if (!started.get()) {
 			throw new IllegalStateException("Cannot accept events as event manager has stopped");
 		}
@@ -50,8 +49,6 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 			//no functional impact other than throwing ClassCastException
 			e.printStackTrace();
 		}
-		
-		eventSynchronizer.activate(event);
 	}
 
 	/* ******************** Life cycle methods ****************** */
@@ -63,13 +60,12 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 		log.info("Starting event manager");
 
 		queueExecutorService = Executors.newSingleThreadExecutor();
-		taskExecutorService = Executors.newCachedThreadPool();
 		started.set(true);
 
 		queueExecutorService.execute(new Runnable() {
 			public void run() {
 				while (started.get()) {
-					consumeEvent();
+					consumeQueuedEvent();
 				}
 			}
 		});
@@ -84,9 +80,6 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 		started.set(false);
 		if (!queueExecutorService.isShutdown()) {
 			queueExecutorService.shutdown();
-		}
-		if (!taskExecutorService.isShutdown()) {
-			taskExecutorService.shutdown();
 		}
 
 		//remove events
@@ -110,22 +103,27 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 	
 	/* ******************** private implementation methods ****************** */
 
-	protected void consumeEvent() {
+	/**
+	 * Consume queued events
+	 */
+	protected void consumeQueuedEvent() {
 
 		try {
 
 			// try every second to get an event
 			// we do this because we don't want this to hang
 			// indefinitely
-			Event Event = (Event) priorityEventQueue.poll(1, TimeUnit.SECONDS);
+			Event event = (Event) priorityEventQueue.poll(1, TimeUnit.SECONDS);
+			
+			System.out.println("Pulled event off queue: " + event);
 
-			if (Event != null) {
+			if (event != null) {
 
 				if (log.isDebugEnabled()) {
-					log.debug("Removing event " + Event + " from the event queue");
+					log.debug("Removing event " + event + " from the event queue");
 				}
 
-				processEvent(Event);
+				processQueuedEvent(event);
 			}
 		}
 		catch (Exception e) {
@@ -134,14 +132,30 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 
 	}
 
-	private void processEvent(Event event) {
+	private void processQueuedEvent(Event event) {
 		String type = event.getEventType().getType();
+		System.out.println("Event type: " + type);
+		
 		List<EventListener> list = eventListenerRegistry.getEventListeners(type);
 
-		if (list != null) {
-			for (EventListener eventListener : list) {
-				EventTask eventTask = newEventTask(event, eventListener);
-				taskExecutorService.submit(eventTask);
+		boolean transactionActive = isTransactionActive();
+		
+		for (EventListener eventListener : list) {
+			EventTask eventTask = newEventTask(event, eventListener);
+
+			System.out.println("Processing queue for listener " + eventListener.getConsumerName() + " for event: " + event);
+			
+			try {
+				if (transactionActive) {
+					//transaction active so need to wait for eventSynchronizer to handle this
+					eventSynchronizer.awaitTransactionCompletion(eventTask);
+				}
+				else {
+					eventSynchronizer.submitTask(eventTask);
+				}				
+			} catch (Exception e) {
+				//FIXME do something about this
+				e.printStackTrace();
 			}
 		}
 	}
@@ -163,11 +177,11 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 	}
 	
 	public boolean isActive() {
-		return started.get() && !taskExecutorService.isShutdown() && !queueExecutorService.isShutdown();
+		return started.get() && !queueExecutorService.isShutdown();
 	}
 
 	public boolean isStopped() {
-		return !started.get() && taskExecutorService.isShutdown() && queueExecutorService.isShutdown();
+		return !started.get() && queueExecutorService.isShutdown();
 	}
 	
 	/* ******************** injected setters ****************** */

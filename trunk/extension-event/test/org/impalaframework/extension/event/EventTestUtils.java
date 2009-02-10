@@ -7,9 +7,9 @@ import java.util.List;
 public class EventTestUtils {
 
 	static TestEventListener[] listeners() {
-		TestEventListener listener1 = new TestEventListener();
-		TestEventListener listener2 = new TestEventListener();
-		TestEventListener listener3 = new TestEventListener();
+		TestEventListener listener1 = new TestEventListener("listener1");
+		TestEventListener listener2 = new TestEventListener("listener2");
+		TestEventListener listener3 = new TestEventListener("listener3");
 	
 		TestEventListener[] listeners = new TestEventListener[]{listener1, listener2, listener3};
 		return listeners;

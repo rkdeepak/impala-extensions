@@ -30,7 +30,7 @@ public class RecordingEventTaskTest extends TestCase {
 	}
 
 	public void testRunWithRecording() {
-		TestEventListener eventListener = new TestEventListener();
+		TestEventListener eventListener = new TestEventListener("runWithRecording");
 		eventListener.setMarkProcessed(true);
 		RecordingEventTask eventTask = new RecordingEventTask(transactionManager, eventDAO, eventSynchronizer, Event, eventListener);
 
@@ -42,7 +42,7 @@ public class RecordingEventTaskTest extends TestCase {
 	}
 	
 	public void testRunNoRecording() {
-		TestEventListener eventListener = new TestEventListener();
+		TestEventListener eventListener = new TestEventListener("runNoRecording");
 		eventListener.setMarkProcessed(false);
 		RecordingEventTask eventTask = new RecordingEventTask(transactionManager, eventDAO, eventSynchronizer, Event, eventListener);
 

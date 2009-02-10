@@ -3,15 +3,12 @@ package org.impalaframework.extension.event;
 
 public class SimpleEventTaskFactory implements EventTaskFactory {
 
-	private EventSynchronizer eventSynchronizer;
-
-	public SimpleEventTaskFactory(EventSynchronizer eventSynchronizer) {
+	public SimpleEventTaskFactory() {
 		super();
-		this.eventSynchronizer = eventSynchronizer;
 	}
 
-	public EventTask newEventTask(Event Event, EventListener eventListener) {
-		return new EventTask(eventSynchronizer, Event, eventListener);
+	public EventTask newEventTask(Event event, EventListener eventListener) {
+		return new EventTask(event, eventListener);
 	}
 
 }
