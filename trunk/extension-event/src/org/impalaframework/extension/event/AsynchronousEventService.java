@@ -27,6 +27,10 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 	private EventTaskFactory eventTaskFactory;
 	
 	private EventSynchronizer eventSynchronizer;
+	
+	private static final int DEFAULT_POLL_INTERVAL = 1000;
+	
+	private Integer pollIntervalInMilliseconds;
 
 	private AtomicBoolean started = new AtomicBoolean(false);
 
@@ -56,6 +60,12 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 	public void start() {
 
 		Assert.notNull(eventListenerRegistry, "eventListenerRegistry cannot be null");
+		Assert.notNull(eventTaskFactory, "eventTaskFactory cannot be null");
+		Assert.notNull(eventSynchronizer, "eventSynchronizer cannot be null");
+		
+		if (pollIntervalInMilliseconds == null) {
+			pollIntervalInMilliseconds = DEFAULT_POLL_INTERVAL;
+		}
 		
 		log.info("Starting event manager");
 
@@ -113,9 +123,7 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 			// try every second to get an event
 			// we do this because we don't want this to hang
 			// indefinitely
-			Event event = (Event) priorityEventQueue.poll(1, TimeUnit.SECONDS);
-			
-			System.out.println("Pulled event off queue: " + event);
+			Event event = (Event) priorityEventQueue.poll(pollIntervalInMilliseconds, TimeUnit.MILLISECONDS);
 
 			if (event != null) {
 
@@ -124,6 +132,11 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 				}
 
 				processQueuedEvent(event);
+			} else {
+
+				if (log.isDebugEnabled()) {
+					log.debug("No event found on queue");
+				}
 			}
 		}
 		catch (Exception e) {
@@ -133,19 +146,25 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 	}
 
 	private void processQueuedEvent(Event event) {
-		String type = event.getEventType().getType();
-		System.out.println("Event type: " + type);
 		
+		String type = event.getEventType().getType();		
 		List<EventListener> list = eventListenerRegistry.getEventListeners(type);
 
 		boolean transactionActive = isTransactionActive();
 		
-		for (EventListener eventListener : list) {
-			EventTask eventTask = newEventTask(event, eventListener);
-
-			System.out.println("Processing queue for listener " + eventListener.getConsumerName() + " for event: " + event);
-			
+		if (log.isDebugEnabled()) {
+			log.debug("Listeners for type " + list);
+			log.debug("Transaction active " + transactionActive);
+		}
+		
+		for (EventListener eventListener : list) {			
 			try {
+				
+				System.out.println("processing" + eventListener);
+				EventTask eventTask = newEventTask(event, eventListener);
+				System.out.println("event task: " + eventTask);
+				if (log.isDebugEnabled()) log.debug("Processing queue for listener " + eventListener.getConsumerName() + " for event: " + event);
+
 				if (transactionActive) {
 					//transaction active so need to wait for eventSynchronizer to handle this
 					eventSynchronizer.awaitTransactionCompletion(eventTask);
@@ -196,6 +215,10 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 
 	public void setEventListenerRegistry(EventListenerRegistry eventListenerRegistry) {
 		this.eventListenerRegistry = eventListenerRegistry;
+	}
+
+	public void setPollIntervalInMilliseconds(Integer pollIntervalInMilliseconds) {
+		this.pollIntervalInMilliseconds = pollIntervalInMilliseconds;
 	}
 
 }

@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.Lifecycle;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -20,12 +22,13 @@ import org.springframework.util.Assert;
  * 
  * @author Phil Zoio
  */
-public class TransactionalEventSynchronizer implements EventSynchronizer, Lifecycle {
+public class TransactionalEventSynchronizer implements EventSynchronizer, Lifecycle, InitializingBean, DisposableBean {
 
 	private static final ThreadLocal<EventTransactionalSynchronization> threadLocalSynchronization = new ThreadLocal<EventTransactionalSynchronization>();
 
 	private ExecutorService taskExecutorService;
 
+	/* **************************  Life cycle methods ****************************** */
 	/**
 	 * Implements start of life cycle by instantiating new {@link ExecutorService}
 	 */
@@ -50,6 +53,18 @@ public class TransactionalEventSynchronizer implements EventSynchronizer, Lifecy
 		return taskExecutorService != null && !taskExecutorService.isShutdown();
 	}
 
+	/* ************************** Initializing and Disposable bean methods ****************************** */
+	
+	public void afterPropertiesSet() throws Exception {
+		start();
+	}
+
+	public void destroy() throws Exception {
+		stop();
+	}
+
+	/* **************************  public methods ****************************** */
+	
 	/**
 	 * Clears the current threads {@link TransactionSynchronization} instance, used to associate events with a
 	 * transaction awaiting completion. Called by {@link TransactionSynchronization} as part of after completion processing.
