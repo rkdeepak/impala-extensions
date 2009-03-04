@@ -106,10 +106,10 @@ public class EventServiceTest extends TestCase {
 		EventType anotherType = new EventType("anothertype", false, true, null);
 		EventType irrelevantType = new EventType("irrelevanttype", false, true, null);
 
-		Event event1 = new Event(lowPriority, "1", 1L, "mytype");
-		Event event2 = new Event(highPriority,  "2", 2L, "mytype");
-		Event event3 = new Event(anotherType, "3", 3L, "anothertype");
-		Event event4 = new Event(irrelevantType,  "4", 4L, "mytype");
+		Event event1 = new Event(lowPriority, "1", "1", "mytype");
+		Event event2 = new Event(highPriority,  "2", "2", "mytype");
+		Event event3 = new Event(anotherType, "3", "3", "anothertype");
+		Event event4 = new Event(irrelevantType,  "4", "4", "mytype");
 		
 		Event[] Event = new Event[] { event1, event2, event3, event4 };
 		return Event;
