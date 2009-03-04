@@ -9,5 +9,9 @@ http://www.springframework.org/schema/tx http://www.springframework.org/schema/t
  <bean id="messageService" class="org.impalaframework.spring.service.proxy.ContributionProxyFactoryBean">
 	 <property name = "proxyInterfaces" value = "org.impalaframework.extension.root.MessageService"/>
  </bean>
+ 
+ <bean id="eventDAO" class="org.impalaframework.spring.service.proxy.ContributionProxyFactoryBean">
+	 <property name = "proxyInterfaces" value = "org.impalaframework.extension.event.EventDAO"/>
+ </bean>
 	
 </beans>
