@@ -18,7 +18,7 @@ public class Event implements Serializable, Comparable<Event> {
 	/**
 	 * The id of the event subject
 	 */
-	private final Long subjectId; 
+	private final String subjectId; 
 	
 	/**
 	 * The entity for which the event applies (e.g. Order, Product, etc.)
@@ -53,7 +53,7 @@ public class Event implements Serializable, Comparable<Event> {
 	public Event(
 			EventType eventType, 
 			String eventId, 
-			Long subjectId,
+			String subjectId,
 			String entity,  
 			Serializable currentData, 
 			String persistentData,
@@ -69,7 +69,7 @@ public class Event implements Serializable, Comparable<Event> {
 		this.processedByDate = processedByDate(eventType, dateTime);
 	}
 
-	public Event(EventType eventType, String eventId, Long subjectId, String entity) {
+	public Event(EventType eventType, String eventId, String subjectId, String entity) {
 		this(eventType, eventId, subjectId, entity, null, null, new Date());
 	}
 	
@@ -82,7 +82,7 @@ public class Event implements Serializable, Comparable<Event> {
 		return eventId;
 	}
 
-	public Long getSubjectId() {
+	public String getSubjectId() {
 		return subjectId;
 	}
 

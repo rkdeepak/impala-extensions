@@ -1,5 +1,7 @@
 package org.impalaframework.extension.event;
 
+import org.springframework.util.Assert;
+
 
 public class DefaultEventService implements EventService {
 	
@@ -12,6 +14,8 @@ public class DefaultEventService implements EventService {
 		final EventType eventType = event.getEventType();
 		
 		if (eventType.isPersistent()) {
+			Assert.notNull(eventDAO, "Cannot use persistent events if no " + EventDAO.class.getSimpleName() +
+					" has been wired in to " + DefaultEventService.class.getName());
 			eventDAO.insertEvent(event);
 		}
 		
