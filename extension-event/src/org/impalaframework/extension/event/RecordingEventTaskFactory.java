@@ -7,9 +7,13 @@ public class RecordingEventTaskFactory implements EventTaskFactory {
 	
 	private PlatformTransactionManager transactionManager;
 	
-	private EventDAO eventDAO;
-	
 	private EventSynchronizer eventSynchronizer;
+	
+	private EventDAO eventDAO;
+
+	public RecordingEventTaskFactory() {
+		super();
+	}
 
 	public RecordingEventTaskFactory(EventSynchronizer eventSynchronizer, PlatformTransactionManager transactionManager, EventDAO eventDAO) {
 		super();
@@ -23,6 +27,18 @@ public class RecordingEventTaskFactory implements EventTaskFactory {
 	
 	public EventTask newEventTask(Event Event, EventListener eventListener) {
 		return new RecordingEventTask(transactionManager, eventDAO, eventSynchronizer, Event, eventListener);
+	}
+
+	public void setTransactionManager(PlatformTransactionManager transactionManager) {
+		this.transactionManager = transactionManager;
+	}
+
+	public void setEventSynchronizer(EventSynchronizer eventSynchronizer) {
+		this.eventSynchronizer = eventSynchronizer;
+	}
+
+	public void setEventDAO(EventDAO eventDAO) {
+		this.eventDAO = eventDAO;
 	}
 	
 	
