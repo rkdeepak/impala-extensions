@@ -4,7 +4,7 @@
 
 The Impala Extensions is a home for extensions to Impala which do not belong in the core project. The extensions project is a collection of potentially unrelated extensions to Impala and Spring.
 
-== Spring MVC ==
+== Spring MVC Extensions ==
 
 Extensions to Spring MVC's annotation based controller framework.
 Includes various `CustomArgumentResolver` implementations, as well an annotation `HandlerAdapter` implementation with support for flash scope as well as other minor enhancements.
