@@ -16,6 +16,6 @@
 	<classpathentry exported="true" kind="lib" path="/repository/test/easymock-2.2.jar" sourcepath="/repository/test/easymock-2.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/repository/test/easymockclassextension-2.2.jar" sourcepath="/repository/test/easymockclassextension-2.2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="/repository/main/cglib-nodep-2.1_3.jar" sourcepath="/repository/test/cglib-nodep-2.1_3-sources.jar"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/extension-event"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/impala-extension-event"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
