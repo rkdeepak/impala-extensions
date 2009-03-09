@@ -6,7 +6,7 @@
 	<classpathentry kind="src" path="webconfig"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/exapp-root"/>
-	<classpathentry kind="lib" path="/repository/main/impala-web-SNAPSHOT.jar" sourcepath="/repository/main/impala-web-SNAPSHOT-sources.jar" exported="true"/>
+	<classpathentry kind="lib" path="/repository/main/impala-web-1.0-SNAPSHOT.jar" sourcepath="/repository/main/impala-web-1.0-SNAPSHOT-sources.jar" exported="true"/>
 	<classpathentry kind="lib" path="/repository/web/spring-webmvc-2.5.5.jar" sourcepath="/repository/main/spring-webmvc-2.5.5-sources.jar" exported="true"/>
 	<classpathentry kind="lib" path="/repository/web/jsp-api-2.0.jar"/>
 	<classpathentry kind="lib" path="/repository/web/servletapi-2.4.jar" exported="true" />

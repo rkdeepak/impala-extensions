@@ -27,5 +27,6 @@
 	<target name = "jetty" depends = "execution:jetty" description="Runs Jetty in ANT"/>
 	<target name = "war" depends = "shared-web:war" description="Do war file build"/>
 	<target name = "tomcat" depends = "shared-tomcat:copy" description="Deploy war to Tomcat"/>
+	<target name = "repo" depends = "repository:publishlocal" description="Publishes to local repository"/>
 	
 </project>
