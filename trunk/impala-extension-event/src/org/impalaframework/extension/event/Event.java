@@ -105,10 +105,6 @@ public class Event implements Serializable, Comparable<Event> {
 	public Date getDateTime() {
 		return dateTime;
 	}
-	
-	public static long getProcessedByDate() {
-		return serialVersionUID;
-	}
 
 	@Override
 	public String toString() {
