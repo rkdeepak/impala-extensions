@@ -7,6 +7,18 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 
+/**
+ * Class whose purpose is to populate event listeners. Event listeners wired in
+ * using the {@link #contributedListeners} property are themselves wired in to
+ * the {@link EventListenerRegistry} (which is wired in using the
+ * {@link #registry} property.
+ * 
+ * This indirection allows for event listeners for a particular
+ * {@link EventListenerRegistry} to receive contributions from multiple sources
+ * via multiple {@link EventListenerContributor} bean instances.
+ * 
+ * @author Phil Zoio
+ */
 public class EventListenerContributor implements InitializingBean, DisposableBean {
 	
 	private EventListenerRegistry registry;
