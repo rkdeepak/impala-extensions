@@ -25,22 +25,6 @@ public class EventListenerContributor implements InitializingBean, DisposableBea
 	
 	private Map<String, EventListener> contributedListeners;
 
-	public EventListenerRegistry getRegistry() {
-		return registry;
-	}
-
-	public void setRegistry(EventListenerRegistry registry) {
-		this.registry = registry;
-	}
-
-	public Map<String, EventListener> getContributedListeners() {
-		return contributedListeners;
-	}
-
-	public void setContributedListeners(Map<String, EventListener> contributedListeners) {
-		this.contributedListeners = contributedListeners;
-	}
-
 	public void afterPropertiesSet() throws Exception {
 		Assert.notNull(contributedListeners);
 		Assert.notNull(registry);
@@ -71,6 +55,16 @@ public class EventListenerContributor implements InitializingBean, DisposableBea
 			type = eventType;
 		}
 		return type;
+	}
+	
+	/* ************************* Spring-wired setters ********************** */
+
+	public void setRegistry(EventListenerRegistry registry) {
+		this.registry = registry;
+	}
+
+	public void setContributedListeners(Map<String, EventListener> contributedListeners) {
+		this.contributedListeners = contributedListeners;
 	}
 
 }
