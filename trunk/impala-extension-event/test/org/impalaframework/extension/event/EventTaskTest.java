@@ -15,7 +15,7 @@ public class EventTaskTest extends TestCase {
 
 	public void setUp() {
 		eventType = new EventType("mytype");
-		event = new Event(eventType, "mysubject", "1", "mytype");
+		event = new Event(eventType, "1", "mytype");
 		eventSynchronizer = new SimpleEventSynchronizer();
 	}
 

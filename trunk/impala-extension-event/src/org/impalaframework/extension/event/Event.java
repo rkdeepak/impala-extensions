@@ -13,7 +13,7 @@ public class Event implements Serializable, Comparable<Event> {
 	/**
 	 * Unique identifier for event
 	 */
-	private final String eventId;
+	private String eventId;
 	
 	/**
 	 * The id of the event subject
@@ -52,14 +52,12 @@ public class Event implements Serializable, Comparable<Event> {
 
 	public Event(
 			EventType eventType, 
-			String eventId, 
-			String subjectId,
-			String entity,  
-			Serializable currentData, 
-			String persistentData,
+			String subjectId, 
+			String entity,
+			Serializable currentData,  
+			String persistentData, 
 			Date date) {
 		super();
-		this.eventId = eventId;
 		this.subjectId = subjectId;
 		this.entity = entity;
 		this.eventType = eventType;
@@ -69,13 +67,17 @@ public class Event implements Serializable, Comparable<Event> {
 		this.processedByDate = processedByDate(eventType, dateTime);
 	}
 
-	public Event(EventType eventType, String eventId, String subjectId, String entity) {
-		this(eventType, eventId, subjectId, entity, null, null, new Date());
+	public Event(EventType eventType, String subjectId, String entity) {
+		this(eventType, subjectId, entity, null, null, new Date());
 	}
 	
 	private Date processedByDate(EventType eventType, Date dateTime) {
 		Date processedByDate = new DateTime(dateTime).plus(eventType.getTargetDelay()).toDate();
 		return processedByDate;
+	}
+
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
 	}
 
 	public String getEventId() {
