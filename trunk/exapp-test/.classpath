@@ -5,6 +5,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/exapp-root"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/exapp-application"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/exapp-web"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/impala-extension-event"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/impala-extension-mvc"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
-
