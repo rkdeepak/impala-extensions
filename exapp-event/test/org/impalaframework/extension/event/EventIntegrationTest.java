@@ -40,7 +40,7 @@ public class EventIntegrationTest extends BaseIntegrationTest {
 		EventType eventType = new EventType("myeventtype");
 		
 		for (int i = 0; i < 10; i++) {
-			Event event = new Event(eventType, "" + i, "1", "mysubjecttype");
+			Event event = new Event(eventType, "1", "mysubjecttype");
 			eventService.submitEvent(event);
 		}
 		
