@@ -7,6 +7,6 @@ public interface EventDAO {
 
 	public void insertProcessedEvent(String eventId, String consumer);
 
-	public void insertFailedEvent(String eventId, String consumer, String error);
+	public void insertFailedEvent(String eventId, String consumer, Throwable error);
 
 }

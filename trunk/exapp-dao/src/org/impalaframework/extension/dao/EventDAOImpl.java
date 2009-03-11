@@ -9,7 +9,7 @@ public class EventDAOImpl implements EventDAO {
 		System.out.println("inserting " + event);
 	}
 
-	public void insertFailedEvent(String eventId, String consumer, String error) {
+	public void insertFailedEvent(String eventId, String consumer, Throwable error) {
 		System.out.println("inserting failed event for id " + eventId + ", consumer " + consumer);
 	}
 
