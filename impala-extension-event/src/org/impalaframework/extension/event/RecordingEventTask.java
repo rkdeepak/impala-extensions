@@ -41,9 +41,17 @@ public class RecordingEventTask extends EventTask {
 				errorText = ExceptionUtils.getStackTrace(error);
 			}
 
-			doStatusRecording(getEvent().getEventId(), getEventListener().getConsumerName(), errorText);
+			final Event event = getEvent();
+			if (event.getEventType().isPersistent()) {
+				
+				String eventId = event.getEventId();
+				
+				if (eventId == null) {
+					throw new IllegalStateException("Event is persisent but no event ID has been set. Event details: " + event);
+				}
+				doStatusRecording(eventId, getEventListener().getConsumerName(), errorText);
+			}
 		}
-
 	}
 
 	void doStatusRecording(final String eventId, final String consumer, final String error) {
