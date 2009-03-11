@@ -73,10 +73,11 @@ public class RecordingEventTaskTest extends TestCase {
 		EventListener eventListener = new AsyncTestEventListener(true);
 		RecordingEventTask eventTask = new RecordingEventTask(transactionManager, eventDAO, eventSynchronizer, event, eventListener);
 
-		eventDAO.insertFailedEvent("myeventId", "myconsumer", "some error");
+		final IllegalStateException exception = new IllegalStateException();
+		eventDAO.insertFailedEvent("myeventId", "myconsumer", exception);
 		
 		replayMocks();
-		eventTask.doStatusRecording("myeventId", "myconsumer", "some error");
+		eventTask.doStatusRecording("myeventId", "myconsumer", exception);
 		verifyMocks();
 	}
 

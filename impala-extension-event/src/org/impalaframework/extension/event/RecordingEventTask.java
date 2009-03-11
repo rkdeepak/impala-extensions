@@ -33,12 +33,12 @@ public class RecordingEventTask extends EventTask {
 			super.run();
 		}
 		else {
-			String errorText = null;
+			Throwable throwable = null;
 			try {
 				super.run();
 			}
 			catch (Throwable error) {
-				errorText = ExceptionUtils.getStackTrace(error);
+				throwable = error;
 			}
 
 			final Event event = getEvent();
@@ -49,12 +49,12 @@ public class RecordingEventTask extends EventTask {
 				if (eventId == null) {
 					throw new IllegalStateException("Event is persisent but no event ID has been set. Event details: " + event);
 				}
-				doStatusRecording(eventId, getEventListener().getConsumerName(), errorText);
+				doStatusRecording(eventId, getEventListener().getConsumerName(), throwable);
 			}
 		}
 	}
 
-	void doStatusRecording(final String eventId, final String consumer, final String error) {
+	void doStatusRecording(final String eventId, final String consumer, final Throwable error) {
 		try {
 			new TransactionTemplate(transactionManager).execute(new TransactionCallback() {
 
