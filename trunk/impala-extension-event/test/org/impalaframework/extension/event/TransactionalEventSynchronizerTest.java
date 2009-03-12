@@ -71,7 +71,7 @@ public class TransactionalEventSynchronizerTest extends TestCase {
 		EventTransactionalSynchronization sync = synchronizer.getTransactionSynchronization();
 		
 		EventType eventType = new EventType("mytype");
-		Event event = new Event(eventType, "1", "mytype");
+		Event event = new Event(eventType, "user", "1", "mytype");
 		TestEventListener listener = new TestEventListener("asyncListener");
 		
 		EventTask task = new EventTask(event, listener);

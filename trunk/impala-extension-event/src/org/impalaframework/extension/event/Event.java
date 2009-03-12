@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.joda.time.DateTime;
+import org.springframework.util.ObjectUtils;
 
 public class Event implements Serializable, Comparable<Event> {
 
@@ -24,6 +25,11 @@ public class Event implements Serializable, Comparable<Event> {
 	 * The entity for which the event applies (e.g. Order, Product, etc.)
 	 */
 	private final String entity;
+	
+	/**
+	 * The name or id of the user associated with the event
+	 */
+	private final String user;
 	
 	/**
 	 * An identifier for the event
@@ -52,12 +58,13 @@ public class Event implements Serializable, Comparable<Event> {
 
 	public Event(
 			EventType eventType, 
-			String subjectId, 
-			String entity,
-			Serializable currentData,  
-			String persistentData, 
-			Date date) {
+			String user, 
+			String subjectId,
+			String entity,  
+			Serializable currentData, 
+			String persistentData, Date date) {
 		super();
+		this.user = user;
 		this.subjectId = subjectId;
 		this.entity = entity;
 		this.eventType = eventType;
@@ -67,8 +74,8 @@ public class Event implements Serializable, Comparable<Event> {
 		this.processedByDate = processedByDate(eventType, dateTime);
 	}
 
-	public Event(EventType eventType, String subjectId, String entity) {
-		this(eventType, subjectId, entity, null, null, new Date());
+	public Event(EventType eventType, String user, String subjectId, String entity) {
+		this(eventType, user, subjectId, entity, null, null, new Date());
 	}
 	
 	private Date processedByDate(EventType eventType, Date dateTime) {
@@ -90,6 +97,10 @@ public class Event implements Serializable, Comparable<Event> {
 
 	public String getEntity() {
 		return entity;
+	}
+
+	public String getUser() {
+		return user;
 	}
 
 	public EventType getEventType() {
@@ -132,12 +143,12 @@ public class Event implements Serializable, Comparable<Event> {
 		buffer.append(", ");
 		buffer.append("transientData = ");
 		if (this.transientData != null)
-			buffer.append(this.transientData.toString());
+			buffer.append(ObjectUtils.identityToString(this.transientData));
 		else
 			buffer.append("value is null");
 		buffer.append(", ");
 		buffer.append("persistentData = ");
-		buffer.append(this.persistentData);
+		buffer.append(ObjectUtils.identityToString(this.transientData));
 		buffer.append(", ");
 		buffer.append("dateTime = ");
 		if (this.dateTime != null)
