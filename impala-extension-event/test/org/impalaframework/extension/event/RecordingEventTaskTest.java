@@ -23,7 +23,7 @@ public class RecordingEventTaskTest extends TestCase {
 
 	public void setUp() {
 		eventType = new EventType("mytype");
-		event = new Event(eventType, "1", "mytype");
+		event = new Event(eventType, "user", "1", "mytype");
 		eventSynchronizer = new SimpleEventSynchronizer();
 		transactionManager = new DummyTransactionManager();
 		eventDAO = createMock(EventDAO.class);

@@ -34,7 +34,7 @@ public class DefaultEventServiceTest extends TestCase {
 		boolean inprocess = false;
 		
 		EventType eventType = new EventType("mytype", persist, inprocess, new Period().withSeconds(10));
-		Event Event = new Event(eventType, "1", "type");
+		Event Event = new Event(eventType, "user", "1", "type");
 
 		//expectations
 		eventDAO.insertEvent(Event);
@@ -56,7 +56,7 @@ public class DefaultEventServiceTest extends TestCase {
 		boolean inprocess = true;
 		
 		EventType eventType = new EventType("mytype", persist, inprocess, new Period().withSeconds(10));
-		Event Event = new Event(eventType, "1", "type");
+		Event Event = new Event(eventType, "user", "1", "type");
 
 		//expectations
 		synchEventService.submitEvent(Event);
@@ -79,7 +79,7 @@ public class DefaultEventServiceTest extends TestCase {
 		boolean inprocess = true;
 		
 		EventType eventType = new EventType("mytype", persist, inprocess, new Period().withSeconds(10));
-		Event Event = new Event(eventType, "1", "type");
+		Event Event = new Event(eventType, "user", "1", "type");
 
 		//expectations
 		eventDAO.insertEvent(Event);
