@@ -50,6 +50,27 @@ public class JdbcArgumentsConverterTest extends TestCase {
 				"select * from table where param1 = ? and param2 = ? where param3 > ?");
 	}
 	
+	public void testArgsNotAtEnd() throws Exception {
+		final Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("param1", "value1");
+		checkConvert(converter, 
+				params,
+				"select * from table where param1 = ${param1} and more stuff",
+				new Object[] {"value1"},
+				"select * from table where param1 = ? and more stuff");
+	}
+	
+	public void testNoArgs() throws Exception {
+		final Map<String, Object> params = new HashMap<String, Object>();
+		
+		checkConvert(converter, 
+				params,
+				"select * from table where param1 = 'param'",
+				new Object[0],
+				"select * from table where param1 = 'param'");
+	}
+	
 	private void checkConvert(JdbcArgumentsConverter converter, Map<String, Object> params, String startSql, Object[] args, String endSql) {
 
 		final JdbcArguments converted = converter.convert(startSql, params);
