@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.util.Assert;
+
 /**
  * Encapsulates a mechanism for converting an SQL statement with named parameters and arguments in
  * the form of a map, into a {@link JdbcArguments} object.
@@ -11,6 +13,23 @@ import java.util.Map;
  * @author Phil Zoio
  */
 public class JdbcArgumentsConverter {
+
+	private String parameterPrefix = null;
+	private String parameterSuffix = null;
+
+	public JdbcArgumentsConverter() {
+		super();
+		this.parameterPrefix = "${";
+		this.parameterSuffix = "}";
+	}
+
+	public JdbcArgumentsConverter(String parameterPrefix, String parameterSuffix) {
+		this();
+		Assert.notNull(parameterPrefix);
+		Assert.notNull(parameterSuffix);
+		this.parameterPrefix = parameterPrefix;
+		this.parameterSuffix = parameterSuffix;
+	}
 
 	public JdbcArguments convert(String sql, Map<String, Object> params) {
 
@@ -61,9 +80,9 @@ public class JdbcArgumentsConverter {
 				return null;
 			}
 			
-			int startIndex = sql.indexOf("${", position);
+			int startIndex = sql.indexOf(parameterPrefix, position);
 			if (startIndex >= 0) {
-				int endIndex = sql.indexOf("}", startIndex+1);
+				int endIndex = sql.indexOf(parameterSuffix, startIndex+1);
 				if (endIndex >= 0) {
 					buffer.append(sql.substring(position, startIndex));
 					buffer.append("?");
@@ -76,6 +95,7 @@ public class JdbcArgumentsConverter {
 				}
 			}
 			
+			buffer.append(sql.substring(position));			
 			return null;
 		}
 		
