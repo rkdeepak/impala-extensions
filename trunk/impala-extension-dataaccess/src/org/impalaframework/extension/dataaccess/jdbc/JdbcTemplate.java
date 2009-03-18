@@ -41,6 +41,20 @@ public class JdbcTemplate extends org.springframework.jdbc.core.JdbcTemplate {
 		converter = new JdbcArgumentsConverter(parameterPrefix, parameterSuffix);
 	}
 
+	/**
+	 * Returns list of maps as in {@link #queryForList(String, Object[])}.
+	 * Equivalent to {@link #queryForList(String, Map, boolean)}, with the final
+	 * argument set to false
+	 * 
+	 * @param sql
+	 *            the sql which contains named arguments, by default in the form
+	 *            ${name}, which will be replaced by ? before being submitted to
+	 *            the JDBC driver
+	 * @param parameters
+	 *            a map of parameter arguments
+	 * @return a list of maps as in {@link #queryForList(String, Object[])}
+	 * @throws DataAccessException
+	 */
 	public List<Map<String, Object>> queryForList(String sql,
 			Map<String, Object> parameters) throws DataAccessException {
 		return queryForList(sql, parameters, false);
