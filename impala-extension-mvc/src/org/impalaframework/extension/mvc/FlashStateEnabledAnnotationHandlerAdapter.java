@@ -18,11 +18,11 @@ import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAda
 import org.springframework.web.servlet.view.RedirectView;
 
 @SuppressWarnings("unchecked")
-public class RequestPreservingAnnotationHandlerAdapter extends AnnotationMethodHandlerAdapter {
+public class FlashStateEnabledAnnotationHandlerAdapter extends AnnotationMethodHandlerAdapter {
 	
-	private static Log logger = LogFactory.getLog(RequestPreservingAnnotationHandlerAdapter.class);
+	private static Log logger = LogFactory.getLog(FlashStateEnabledAnnotationHandlerAdapter.class);
 	
-	public RequestPreservingAnnotationHandlerAdapter() {
+	public FlashStateEnabledAnnotationHandlerAdapter() {
 		super();
 	}
 
@@ -37,6 +37,9 @@ public class RequestPreservingAnnotationHandlerAdapter extends AnnotationMethodH
 		
 		ModelAndView modelAndView = super.handle(request, response, handler);
 
+		//controller method can return null ModelAndView if handling
+		if (modelAndView == null) return null;
+		
 		final ModelMap modelMap = modelAndView.getModelMap();
 		
 		//merge in existing flash state from request
@@ -76,10 +79,6 @@ public class RequestPreservingAnnotationHandlerAdapter extends AnnotationMethodH
 			while (parameterNames.hasMoreElements()) {
 				String name = parameterNames.nextElement();
 				String value = request.getParameter(name);
-				final String lowerCase = name.toLowerCase();
-				if (lowerCase.contains("password") || lowerCase.contains("cardnumber")) {
-					value = "HIDDEN";
-				}
 				parameters.put(name, value);
 			}
 			

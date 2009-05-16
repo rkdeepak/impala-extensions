@@ -18,16 +18,16 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-public class RequestPreservingAnnotationHandlerAdapterTest extends TestCase {
+public class FlashStateEnabledAnnotationHandlerAdapterTest extends TestCase {
 	
-	private RequestPreservingAnnotationHandlerAdapter adapter;
+	private FlashStateEnabledAnnotationHandlerAdapter adapter;
 	private HttpServletRequest request;
 	private HttpSession session;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		adapter = new RequestPreservingAnnotationHandlerAdapter();
+		adapter = new FlashStateEnabledAnnotationHandlerAdapter();
 		request = createMock(HttpServletRequest.class);
 		session = createMock(HttpSession.class);
 	}

@@ -8,7 +8,7 @@ public class AutomatedMvcTests extends TestCase {
 
 	public static Test suite() {
 		TestSuite suite = new TestSuite();
-		suite.addTestSuite(RequestPreservingAnnotationHandlerAdapterTest.class);
+		suite.addTestSuite(FlashStateEnabledAnnotationHandlerAdapterTest.class);
 		return suite;
 	}
 }
