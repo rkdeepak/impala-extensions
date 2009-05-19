@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" 
+       xmlns:service="http://www.impalaframework.org/schema/service"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
-http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://www.impalaframework.org/schema/service 
+http://impala.googlecode.com/svn/schema/service-registry.xsd">
 
-    <bean class = "org.impalaframework.spring.service.exporter.ServiceArrayRegistryExporter">
-    	<property name="beanNames" value="eventService,syncEventListenerRegistry,asyncEventListenerRegistry"/>
-    </bean>	
+	<service:export-array beanNames="eventService,syncEventListenerRegistry,asyncEventListenerRegistry"/>
     
 	<bean id="eventService" class="org.impalaframework.extension.event.DefaultEventService">
     	<property name="eventDAO" ref="eventDAO"/>
