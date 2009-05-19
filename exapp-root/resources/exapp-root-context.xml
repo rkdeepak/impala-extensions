@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" 
+       xmlns:service="http://www.impalaframework.org/schema/service"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       
 	   xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="
-http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
-	
- <bean id="messageService" class="org.impalaframework.spring.service.proxy.ContributionProxyFactoryBean">
-	 <property name = "proxyInterfaces" value = "org.impalaframework.extension.root.MessageService"/>
- </bean>
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://www.springframework.org/schema/tx 
+http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+http://www.impalaframework.org/schema/service 
+http://impala.googlecode.com/svn/schema/service-registry.xsd">
+
+ <service:import id = "messageService" proxyTypes = "org.impalaframework.extension.root.MessageService"/>
  
- <bean id="eventDAO" class="org.impalaframework.spring.service.proxy.ContributionProxyFactoryBean">
-	 <property name = "proxyInterfaces" value = "org.impalaframework.extension.event.EventDAO"/>
- </bean>
+ <service:import id = "eventDAO" proxyTypes = "org.impalaframework.extension.event.EventDAO"/>
 	
 </beans>
