@@ -14,6 +14,6 @@ public @interface SessionAttribute {
 	/**
 	 * The session attribute to bind to.
 	 */
-	String value() default "";
+	String value();
 
 }

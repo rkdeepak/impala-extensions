@@ -14,6 +14,6 @@ public @interface RequestHeader {
 	/**
 	 * The name of header to bind to
 	 */
-	String value() default "";
+	String value();
 
 }

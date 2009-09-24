@@ -28,8 +28,6 @@ public class RequestParameterMapArgumentResolver extends BaseAttributeArgumentRe
 	@SuppressWarnings("unchecked")
 	protected Object getValue(NativeWebRequest webRequest, String encoding) {
 		
-		//FIXME add test
-		
 		Object nativeRequest = webRequest.getNativeRequest();
 		if (nativeRequest instanceof HttpServletRequest) {
 			HttpServletRequest req = (HttpServletRequest) nativeRequest;

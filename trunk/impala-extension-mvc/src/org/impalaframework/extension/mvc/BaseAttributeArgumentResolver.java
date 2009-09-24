@@ -16,9 +16,10 @@ public abstract class BaseAttributeArgumentResolver implements WebArgumentResolv
 		
 		String attributeName = null;
 		
+		Object paramAnn = null;
 		Object[] paramAnns = methodParameter.getParameterAnnotations();
 		for (int j = 0; j < paramAnns.length; j++) {
-			Object paramAnn = paramAnns[j];
+			paramAnn = paramAnns[j];
 			attributeName = getAttribute(paramAnn);
 			if (attributeName != null) {
 				break;
@@ -29,8 +30,21 @@ public abstract class BaseAttributeArgumentResolver implements WebArgumentResolv
 			return UNRESOLVED;
 		}
 		
-		Object attribute = getValue(webRequest, attributeName);
-		return attribute;
+		Object value = getValue(webRequest, attributeName);
+		
+		if (paramAnn != null) {
+			checkValue(value, paramAnn);
+		}
+		
+		return value;
+	}
+
+	/**
+	 * Can be used to validate value based on annotation contents. For example, to check if value is required
+	 * @param value the value returned from the request
+	 * @param paramAnn matched annotation
+	 */
+	protected void checkValue(Object value, Object paramAnn) {
 	}
 
 	protected abstract Object getValue(NativeWebRequest webRequest, String attributeName);

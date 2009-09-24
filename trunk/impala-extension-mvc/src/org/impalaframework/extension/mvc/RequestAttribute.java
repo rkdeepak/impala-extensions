@@ -14,6 +14,6 @@ public @interface RequestAttribute {
 	/**
 	 * The request parameter to bind to.
 	 */
-	String value() default "";
+	String value();
 
 }
