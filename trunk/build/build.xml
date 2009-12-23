@@ -9,6 +9,7 @@
 	<echo>Project using impala home: ${impala.home}</echo>
 	
 	<property file = "build.properties"/>
+	<property file = "shared.properties"/>
 	<property file = "web.properties"/>
 	
 	<import file = "${impala.home}/project-build.xml"/>
@@ -17,6 +18,7 @@
 	<import file = "${impala.home}/shared-tomcat-build.xml"/>
 	<import file = "${impala.home}/download-build.xml"/>
 	<import file = "${impala.home}/repository-build.xml"/>
+	<import file = "${impala.home}/mvn-build.xml"/>
 	<import file = "${impala.home}/execution-build.xml"/>
 	
 	<target name = "get" depends = "shared:get" description="Gets project dependencies as in dependencies.txt"/>
@@ -27,6 +29,7 @@
 	<target name = "jetty" depends = "execution:jetty" description="Runs Jetty in ANT"/>
 	<target name = "war" depends = "shared-web:war" description="Do war file build"/>
 	<target name = "tomcat" depends = "shared-tomcat:copy" description="Deploy war to Tomcat"/>
-	<target name = "repo" depends = "repository:publishlocal" description="Publishes to local repository"/>
+	<target name = "publishlocal" depends = "mvn:publish-local" description="Publishes to local Maven repository"/>
+	<target name = "deployremote" depends = "shared:mvn-deploy" description="Deploys to remote Maven repository"/>
 	
 </project>
