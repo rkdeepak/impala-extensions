@@ -3,6 +3,8 @@ package org.impalaframework.extension.event;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
@@ -21,6 +23,8 @@ import org.springframework.util.Assert;
  */
 public class EventListenerContributor implements InitializingBean, DisposableBean {
 	
+	private static final Log logger = LogFactory.getLog(EventListenerContributor.class);
+	
 	private EventListenerRegistry registry;
 	
 	private Map<String, EventListener> contributedListeners;
@@ -33,6 +37,11 @@ public class EventListenerContributor implements InitializingBean, DisposableBea
 		for (String eventType : eventTypes) {
 			String contributionType  = getType(eventType);
 			EventListener listener = contributedListeners.get(eventType);
+			
+			if (listener != null && logger.isDebugEnabled()) {
+				logger.debug("Contributing instance of " + listener.getClass().getName() + ", consumer '" + listener.getConsumerName() + "' for event type: " + eventType);
+			}
+			
 			registry.addListener(contributionType, listener);
 		}
 	}
@@ -42,6 +51,11 @@ public class EventListenerContributor implements InitializingBean, DisposableBea
 		for (String eventType : eventTypes) {
 			String contributionType  = getType(eventType);
 			EventListener listener = contributedListeners.get(eventType);
+			
+			if (listener != null && logger.isDebugEnabled()) {
+				logger.debug("Contributing instance of " + listener.getClass().getName() + ", consumer '" + listener.getConsumerName() + "' for event type: " + eventType);
+			}
+			
 			registry.removeListener(contributionType, listener);
 		}
 	}
