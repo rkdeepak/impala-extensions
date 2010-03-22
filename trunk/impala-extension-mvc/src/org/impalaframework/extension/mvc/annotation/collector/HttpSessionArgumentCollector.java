@@ -17,7 +17,6 @@ package org.impalaframework.extension.mvc.annotation.collector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.impalaframework.extension.mvc.annotation.handler.ArgumentCollector;
 import org.springframework.beans.TypeConverter;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.web.context.request.NativeWebRequest;

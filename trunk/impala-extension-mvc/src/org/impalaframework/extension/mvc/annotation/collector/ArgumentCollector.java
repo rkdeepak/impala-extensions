@@ -12,7 +12,7 @@
  * the License.
  */
 
-package org.impalaframework.extension.mvc.annotation.handler;
+package org.impalaframework.extension.mvc.annotation.collector;
 
 import org.springframework.beans.TypeConverter;
 import org.springframework.ui.ExtendedModelMap;
