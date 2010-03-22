@@ -1,4 +1,4 @@
-package org.impalaframework.extension.mvc.annotation.argument;
+package org.impalaframework.extension.mvc.annotation.resolver;
 
 import java.util.Enumeration;
 import java.util.HashMap;

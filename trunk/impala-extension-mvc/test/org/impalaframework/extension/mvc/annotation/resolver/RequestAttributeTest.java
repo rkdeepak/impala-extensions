@@ -1,9 +1,9 @@
-package org.impalaframework.extension.mvc.annotation.argument;
+package org.impalaframework.extension.mvc.annotation.resolver;
 
 import static org.easymock.EasyMock.expect;
 
 import org.impalaframework.extension.mvc.BaseResolverTest;
-import org.impalaframework.extension.mvc.annotation.argument.RequestAttributeArgumentResolver;
+import org.impalaframework.extension.mvc.annotation.resolver.RequestAttributeArgumentResolver;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.context.request.WebRequest;

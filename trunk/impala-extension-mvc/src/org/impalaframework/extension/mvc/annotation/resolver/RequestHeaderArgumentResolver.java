@@ -1,4 +1,4 @@
-package org.impalaframework.extension.mvc.annotation.argument;
+package org.impalaframework.extension.mvc.annotation.resolver;
 
 import javax.servlet.http.HttpServletRequest;
 

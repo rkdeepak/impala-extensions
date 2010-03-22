@@ -5,11 +5,11 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 import org.impalaframework.extension.mvc.FlashStateEnabledAnnotationHandlerAdapterTest;
-import org.impalaframework.extension.mvc.annotation.argument.RequestAttributeTest;
-import org.impalaframework.extension.mvc.annotation.argument.RequestBodyTest;
-import org.impalaframework.extension.mvc.annotation.argument.RequestHeaderTest;
-import org.impalaframework.extension.mvc.annotation.argument.RequestParameterMapTest;
-import org.impalaframework.extension.mvc.annotation.argument.SessionAttributeTest;
+import org.impalaframework.extension.mvc.annotation.resolver.RequestAttributeTest;
+import org.impalaframework.extension.mvc.annotation.resolver.RequestBodyTest;
+import org.impalaframework.extension.mvc.annotation.resolver.RequestHeaderTest;
+import org.impalaframework.extension.mvc.annotation.resolver.RequestParameterMapTest;
+import org.impalaframework.extension.mvc.annotation.resolver.SessionAttributeTest;
 
 public class AutomatedMvcTests extends TestCase {
 

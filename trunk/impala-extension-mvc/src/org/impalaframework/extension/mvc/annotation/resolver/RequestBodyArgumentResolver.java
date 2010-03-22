@@ -1,4 +1,4 @@
-package org.impalaframework.extension.mvc.annotation.argument;
+package org.impalaframework.extension.mvc.annotation.resolver;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
