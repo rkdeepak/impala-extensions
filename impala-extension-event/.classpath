@@ -5,10 +5,10 @@
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="/repository/main/commons-logging-1.1.jar" sourcepath="/repository/test/commons-logging-1.1-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="/repository/main/spring-2.5.5.jar" sourcepath="/repository/main/spring-2.5.5-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/repository/main/spring-2.5.6.jar" sourcepath="/repository/main/spring-2.5.6-sources.jar"/>
 	<classpathentry kind="lib" path="/repository/main/joda-time-1.5.2.jar"/>
 	<classpathentry kind="lib" path="/repository/test/easymock-2.2.jar" sourcepath="/repository/test/easymock-2.2-sources.jar"/>
 	<classpathentry kind="lib" path="/repository/test/junit-3.8.1.jar" sourcepath="/repository/test/junit-3.8.1-sources.jar"/>
-	<classpathentry kind="lib" path="/repository/main/impala-core-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/repository/compile/impala-core-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

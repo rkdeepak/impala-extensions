@@ -2,8 +2,6 @@ package org.impalaframework.extension.mvc.annotation.resolver;
 
 import static org.easymock.EasyMock.expect;
 
-import org.impalaframework.extension.mvc.BaseResolverTest;
-import org.impalaframework.extension.mvc.annotation.resolver.RequestHeaderArgumentResolver;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.ReflectionUtils;
 

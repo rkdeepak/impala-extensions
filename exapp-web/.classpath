@@ -5,8 +5,8 @@
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/exapp-root"/>
-	<classpathentry exported="true" kind="lib" path="/repository/main/impala-web-1.0-SNAPSHOT.jar" sourcepath="/repository/main/impala-web-1.0-SNAPSHOT-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="/repository/web/spring-webmvc-2.5.5.jar" sourcepath="/repository/main/spring-webmvc-2.5.5-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/repository/compile/impala-web-1.0-SNAPSHOT.jar" sourcepath="/repository/compile/impala-web-1.0-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="/repository/web/spring-webmvc-2.5.6.jar" sourcepath="/repository/main/spring-webmvc-2.5.6-sources.jar"/>
 	<classpathentry kind="lib" path="/repository/web/jsp-api-2.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="/repository/web/servletapi-2.4.jar"/>
 	<classpathentry kind="lib" path="/repository/jetty/jasper-compiler-5.5.15.jar"/>
