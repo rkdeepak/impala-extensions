@@ -6,8 +6,6 @@ import java.io.IOException;
 
 import javax.servlet.ServletInputStream;
 
-import org.impalaframework.extension.mvc.BaseResolverTest;
-import org.impalaframework.extension.mvc.annotation.resolver.RequestBodyArgumentResolver;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.ReflectionUtils;
 

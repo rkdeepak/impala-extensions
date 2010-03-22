@@ -6,8 +6,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
-import org.impalaframework.extension.mvc.BaseResolverTest;
-import org.impalaframework.extension.mvc.annotation.resolver.RequestParameterMapArgumentResolver;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.ReflectionUtils;
 
