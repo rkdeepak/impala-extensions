@@ -1,4 +1,4 @@
-package org.impalaframework.extension.mvc.annotation.argument;
+package org.impalaframework.extension.mvc.annotation.resolver;
 
 import org.impalaframework.extension.mvc.annotation.RequestAttribute;
 import org.springframework.web.bind.support.WebArgumentResolver;

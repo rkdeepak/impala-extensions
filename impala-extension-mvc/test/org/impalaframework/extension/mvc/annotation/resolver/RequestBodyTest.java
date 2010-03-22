@@ -1,25 +1,28 @@
-package org.impalaframework.extension.mvc.annotation.argument;
+package org.impalaframework.extension.mvc.annotation.resolver;
 
 import static org.easymock.EasyMock.expect;
 
+import java.io.IOException;
+
+import javax.servlet.ServletInputStream;
+
 import org.impalaframework.extension.mvc.BaseResolverTest;
-import org.impalaframework.extension.mvc.annotation.argument.SessionAttributeArgumentResolver;
+import org.impalaframework.extension.mvc.annotation.resolver.RequestBodyArgumentResolver;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.web.context.request.WebRequest;
 
-public class SessionAttributeTest extends BaseResolverTest {
+public class RequestBodyTest extends BaseResolverTest {
 
-	private SessionAttributeArgumentResolver resolver;
+	private RequestBodyArgumentResolver resolver;
 	
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		resolver = new SessionAttributeArgumentResolver();
+		resolver = new RequestBodyArgumentResolver();
 	}
 	
 	public void testAttribute() throws Exception {
-		assertEquals("value", doRequestAttribute("sessionAttribute", "attribute", "value"));
+		assertEquals("", doRequestAttribute("requestBody", "attribute", "value"));
 	}
 
 	private Object doRequestAttribute(String methodName, final String attributeName, final String value)
@@ -27,7 +30,14 @@ public class SessionAttributeTest extends BaseResolverTest {
 		
 		MethodParameter methodParameter = new MethodParameter(ReflectionUtils.findMethod(AnnotatedClass.class, methodName, new Class[]{ String.class }), 0);
 
-		expect(nativeRequest.getAttribute(attributeName, WebRequest.SCOPE_SESSION)).andReturn(value);
+		expect(nativeRequest.getNativeRequest()).andReturn(request);
+		expect(request.getInputStream()).andReturn(new ServletInputStream() {
+			
+			@Override
+			public int read() throws IOException {
+				return -1;
+			}
+		});
 		
 		replayMocks();
 		
