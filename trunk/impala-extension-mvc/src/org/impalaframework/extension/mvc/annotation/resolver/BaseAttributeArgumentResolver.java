@@ -23,7 +23,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 
 /**
  * Implements template method for attribute argument resolver implementations
- * 
  * @author Phil Zoio
  */
 public abstract class BaseAttributeArgumentResolver implements WebArgumentResolver {
@@ -37,8 +36,6 @@ public abstract class BaseAttributeArgumentResolver implements WebArgumentResolv
 		
 		Annotation[] paramAnns = null;
 
-		//paramAnns = (Annotation[]) methodParameter.getParameterAnnotations();
-		
 		try {
 			// using reflection since Spring 3.0 returns Annotation[] yet Spring 2.5 returns Object[]
 			String methodName = "getParameterAnnotations";

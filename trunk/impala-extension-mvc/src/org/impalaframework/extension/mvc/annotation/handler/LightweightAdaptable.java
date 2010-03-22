@@ -20,6 +20,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * {@link Handler} annotated annotation, used to annotate a controller class
+ * which can be adapted by {@link LightweightAnnotationHandlerAdapter}
+ * 
+ * @author Phil Zoio
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Handler

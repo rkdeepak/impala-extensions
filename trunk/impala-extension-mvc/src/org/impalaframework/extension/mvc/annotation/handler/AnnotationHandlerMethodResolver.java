@@ -33,16 +33,37 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.support.HandlerMethodResolver;
 import org.springframework.web.util.UrlPathHelper;
 
+/**
+ * Provides a simplified mechanism for mapping requests to method names, based
+ * on URI path literals. Maintains a cache of these. Wraps
+ * {@link HandlerMethodResolver} for handler metadata.
+ * 
+ * @author Phil Zoio
+ */
 public class AnnotationHandlerMethodResolver {
 		
+	/**
+	 * Cache of URI path literals to handler methods
+	 */
 	private Map<String,Method> pathMethodCache = new ConcurrentHashMap<String, Method>();	
 
 	private UrlPathHelper urlPathHelper = new UrlPathHelper();
 	
+	/**
+	 * {@link HandlerMethodResolver} instance. Should be initialised before being wired in to this instance
+	 */
 	private HandlerMethodResolver handlerMethodResolver;
 	
+	/**
+	 * The adapated handler class
+	 */
 	private Class<?> handlerClass;
 	
+	/**
+	 * Class level annotations which are themselves annotated using the {@link Handler} annotation.
+	 * Primary purpose is to determine which flavour of handler adapter implementation to apply for a given
+	 * controller class
+	 */
 	private Collection<Annotation> handlerAnnotations = new ArrayList<Annotation>();
 	
 	/**
@@ -59,7 +80,6 @@ public class AnnotationHandlerMethodResolver {
 		List<Annotation> handlerAnnotations = new ArrayList<Annotation>();
 		final Annotation[] annotations = handlerClass.getAnnotations();
 		for (Annotation annotation : annotations) {
-			System.out.println(annotation.annotationType().getAnnotation(Handler.class));
 			
 			if (annotation.annotationType().getAnnotation(Handler.class) != null) {
 				handlerAnnotations.add(annotation);

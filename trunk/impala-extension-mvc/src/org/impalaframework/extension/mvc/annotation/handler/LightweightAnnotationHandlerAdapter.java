@@ -40,7 +40,8 @@ import org.springframework.web.servlet.HandlerAdapter;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
- * Lightweight version of Spring's annotation adapter handler
+ * Simplified lightweight version of Spring's annotation adapter handler. Supports path to method mappings based on path literals only.
+ * Also, currently does not support {@link org.springframework.web.bind.annotation.SessionAttributes} annotation
  * @see org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter
  * @author Phil Zoio
  */
