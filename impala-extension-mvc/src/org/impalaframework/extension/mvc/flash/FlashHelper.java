@@ -24,7 +24,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.ui.ModelMap;
 
 /**
- * Class with responsibilities for flash-scope specific request operations
+ * Class with responsibilities for flash-scope specific request and model management operations.
  * @author Phil Zoio
  */
 @SuppressWarnings("unchecked")

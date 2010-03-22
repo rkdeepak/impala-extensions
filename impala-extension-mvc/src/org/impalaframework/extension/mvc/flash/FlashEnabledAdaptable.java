@@ -12,7 +12,19 @@
  * the License.
  */
 
-package org.impalaframework.extension.mvc.annotation.handler;
+package org.impalaframework.extension.mvc.flash;
 
-public interface RequestPreservingAdaptable {
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import org.impalaframework.extension.mvc.annotation.handler.Handler;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Handler
+@Documented
+public @interface FlashEnabledAdaptable {
 }
