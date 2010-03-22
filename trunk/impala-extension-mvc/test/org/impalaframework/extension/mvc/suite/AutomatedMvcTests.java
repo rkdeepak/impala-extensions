@@ -21,6 +21,8 @@ import junit.framework.TestSuite;
 import org.impalaframework.extension.mvc.annotation.collector.CustomResolverArgumentCollectorTest;
 import org.impalaframework.extension.mvc.annotation.collector.ModelArgumentCollectorTest;
 import org.impalaframework.extension.mvc.annotation.collector.RequestParameterArgumentCollectorTest;
+import org.impalaframework.extension.mvc.annotation.handler.AnnotationHandlerMethodResolverTest;
+import org.impalaframework.extension.mvc.annotation.handler.LightweightAnnotationHandlerAdapterTest;
 import org.impalaframework.extension.mvc.annotation.resolver.RequestAttributeTest;
 import org.impalaframework.extension.mvc.annotation.resolver.RequestBodyTest;
 import org.impalaframework.extension.mvc.annotation.resolver.RequestHeaderTest;
@@ -44,7 +46,10 @@ public class AutomatedMvcTests extends TestCase {
 		suite.addTestSuite(CustomResolverArgumentCollectorTest.class);
 		suite.addTestSuite(ModelArgumentCollectorTest.class);
 		suite.addTestSuite(RequestParameterArgumentCollectorTest.class);
-		
+
+		suite.addTestSuite(AnnotationHandlerMethodResolverTest.class);		
+		suite.addTestSuite(LightweightAnnotationHandlerAdapterTest.class);		
+
 		suite.addTestSuite(RequestModelHelperTest.class);
 		return suite;
 	}
