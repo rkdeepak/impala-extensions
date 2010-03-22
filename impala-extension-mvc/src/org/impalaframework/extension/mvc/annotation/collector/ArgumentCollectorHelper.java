@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.impalaframework.extension.mvc.annotation.WebAnnotationUtils;
-import org.impalaframework.extension.mvc.annotation.handler.ArgumentCollector;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;

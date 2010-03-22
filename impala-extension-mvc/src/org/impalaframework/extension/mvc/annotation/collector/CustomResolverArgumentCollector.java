@@ -14,7 +14,6 @@
 
 package org.impalaframework.extension.mvc.annotation.collector;
 
-import org.impalaframework.extension.mvc.annotation.handler.ArgumentCollector;
 import org.springframework.beans.TypeConverter;
 import org.springframework.core.MethodParameter;
 import org.springframework.ui.ExtendedModelMap;
