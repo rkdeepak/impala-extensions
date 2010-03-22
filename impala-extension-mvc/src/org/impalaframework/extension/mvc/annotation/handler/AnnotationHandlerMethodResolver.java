@@ -14,7 +14,12 @@
 
 package org.impalaframework.extension.mvc.annotation.handler;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,6 +41,10 @@ public class AnnotationHandlerMethodResolver {
 	
 	private HandlerMethodResolver handlerMethodResolver;
 	
+	private Class<?> handlerClass;
+	
+	private Collection<Annotation> handlerAnnotations = new ArrayList<Annotation>();
+	
 	/**
 	 * Passes in initialized {@link HandlerMethodResolver} instance
 	 * @param handlerClass
@@ -43,6 +52,24 @@ public class AnnotationHandlerMethodResolver {
 	 */
 	public AnnotationHandlerMethodResolver(Class<?> handlerClass, HandlerMethodResolver handlerMethodResolver) {
 		this.handlerMethodResolver = handlerMethodResolver;
+		this.handlerClass = handlerClass;
+	}
+	
+	public void init() {
+		List<Annotation> handlerAnnotations = new ArrayList<Annotation>();
+		final Annotation[] annotations = handlerClass.getAnnotations();
+		for (Annotation annotation : annotations) {
+			System.out.println(annotation.annotationType().getAnnotation(Handler.class));
+			
+			if (annotation.annotationType().getAnnotation(Handler.class) != null) {
+				handlerAnnotations.add(annotation);
+			}
+		}
+		this.handlerAnnotations = Collections.unmodifiableList(handlerAnnotations);
+	}
+	
+	public Collection<Annotation> getHandlerAnnotations() {
+		return handlerAnnotations;
 	}
 
 	public Method resolveHandlerMethod(HttpServletRequest request) throws ServletException {

@@ -14,15 +14,15 @@
 
 package org.impalaframework.extension.mvc.annotation.handler;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import junit.framework.TestCase;
 
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-@Handler
-@Documented
-public @interface LightweightAdaptable {
+public class AnnotationHandlerMethodResolverTest extends TestCase {
+
+	public void testInit() throws Exception {
+		final AnnotationHandlerMethodResolver resolver = new AnnotationHandlerMethodResolver(LightweightController.class, null);
+		resolver.init();
+		
+		assertEquals(1, resolver.getHandlerAnnotations().size());
+	}
+	
 }

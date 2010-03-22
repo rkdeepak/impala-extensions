@@ -14,8 +14,10 @@
 
 package org.impalaframework.extension.mvc.annotation.handler;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,6 +25,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.impalaframework.util.ReflectionUtils;
 import org.springframework.beans.TypeConverter;
 import org.springframework.beans.factory.InitializingBean;
@@ -42,6 +46,8 @@ import org.springframework.web.servlet.ModelAndView;
  */
 public class LightweightAnnotationHandlerAdapter implements HandlerAdapter, InitializingBean {
 
+	private static final Log logger = LogFactory.getLog(LightweightAnnotationHandlerAdapter.class);
+	
 	private WebArgumentResolver[] customArgumentResolvers;
 	
 	private final Map<Class<?>, AnnotationHandlerMethodResolver> methodResolverCache =
@@ -55,13 +61,7 @@ public class LightweightAnnotationHandlerAdapter implements HandlerAdapter, Init
 	
 	public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
 		throws Exception {
-		try {
-			return invokeHandlerMethod(request, response, handler);
-		}
-		catch (RuntimeException e) {
-			e.printStackTrace();
-			throw e;
-		}
+		return invokeHandlerMethod(request, response, handler);
 	}
 	
 	public long getLastModified(HttpServletRequest request, Object handler) {
@@ -69,7 +69,20 @@ public class LightweightAnnotationHandlerAdapter implements HandlerAdapter, Init
 	}
 	
 	public boolean supports(Object handler) {
-		return (handler instanceof LightweightAdaptable);
+		return hasHandlerAnnotation(handler, LightweightAdaptable.class);
+	}
+	
+	/* ****************** Implementation methods ************** */
+	
+	protected boolean hasHandlerAnnotation(
+			Object handler,
+			final Class<? extends Annotation> annotationClass) {
+		final AnnotationHandlerMethodResolver methodResolver = getMethodResolver(handler);
+		final Collection<Annotation> handlerAnnotations = methodResolver.getHandlerAnnotations();
+		for (Annotation annotation : handlerAnnotations) {
+			if (annotationClass.isInstance(annotation)) return true;
+		}
+		return false;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -77,8 +90,6 @@ public class LightweightAnnotationHandlerAdapter implements HandlerAdapter, Init
 			HttpServletRequest request,
 			HttpServletResponse response, 
 			Object handler) throws Exception {
-		
-		long start = System.currentTimeMillis();
 		
 		AnnotationHandlerMethodResolver methodResolver = getMethodResolver(handler);
 		Method handlerMethod = methodResolver.resolveHandlerMethod(request);
@@ -96,9 +107,6 @@ public class LightweightAnnotationHandlerAdapter implements HandlerAdapter, Init
 		ModelAndView mav = methodInvoker.getModelAndView(handlerMethod, handler.getClass(), result, implicitModel, webRequest);
 		methodInvoker.updateModelAttributes(handler, (mav != null ? mav.getModel() : null), implicitModel, webRequest);
 		
-		long end = System.currentTimeMillis();
-		System.out.println("Handler execution time: " + (end - start));
-		
 		return mav;
 	}
 	
@@ -110,6 +118,7 @@ public class LightweightAnnotationHandlerAdapter implements HandlerAdapter, Init
 			HandlerMethodResolver handlerMethodResolver = newHandlerMethodResolver(handlerClass);	
 			
 			resolver = new AnnotationHandlerMethodResolver(handlerClass, handlerMethodResolver);
+			resolver.init();
 			this.methodResolverCache.put(handlerClass, resolver);
 		}
 		return resolver;
