@@ -1,5 +1,8 @@
 package org.impalaframework.extension.mvc.annotation.argument;
 
+import java.lang.annotation.Annotation;
+
+import org.impalaframework.extension.mvc.annotation.WebAnnotationUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -17,7 +20,20 @@ public abstract class BaseAttributeArgumentResolver implements WebArgumentResolv
 		String attributeName = null;
 		
 		Object paramAnn = null;
-		Object[] paramAnns = methodParameter.getParameterAnnotations();
+		
+		Annotation[] paramAnns = null;
+
+		//paramAnns = (Annotation[]) methodParameter.getParameterAnnotations();
+		
+		try {
+			// using reflection since Spring 3.0 returns Annotation[] yet Spring 2.5 returns Object[]
+			String methodName = "getParameterAnnotations";
+			paramAnns = WebAnnotationUtils.getAnnotations(methodParameter, methodName);
+		}
+		catch (Exception e) {
+			throw new IllegalStateException("Failed to introspect method parameter annotations", e);
+		}
+		
 		for (int j = 0; j < paramAnns.length; j++) {
 			paramAnn = paramAnns[j];
 			attributeName = getAttribute(paramAnn);
