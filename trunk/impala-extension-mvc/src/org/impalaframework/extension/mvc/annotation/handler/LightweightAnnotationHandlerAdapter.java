@@ -93,6 +93,11 @@ public class LightweightAnnotationHandlerAdapter implements HandlerAdapter, Init
 		
 		AnnotationHandlerMethodResolver methodResolver = getMethodResolver(handler);
 		Method handlerMethod = methodResolver.resolveHandlerMethod(request);
+		
+		if (logger.isDebugEnabled()) {
+			logger.debug("Method for " + request.getRequestURI() + ": " + handlerMethod);
+		}
+		
 		ServletWebRequest webRequest = new ServletWebRequest(request, response);
 		ExtendedModelMap implicitModel = new BindingAwareModelMap();
 		
