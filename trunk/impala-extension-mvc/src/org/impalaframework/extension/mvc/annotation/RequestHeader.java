@@ -1,4 +1,4 @@
-package org.impalaframework.extension.mvc;
+package org.impalaframework.extension.mvc.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -9,5 +9,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface RequestParameterMap {
+public @interface RequestHeader {
+
+	/**
+	 * The name of header to bind to
+	 */
+	String value();
+
 }

@@ -1,4 +1,4 @@
-package org.impalaframework.extension.mvc;
+package org.impalaframework.extension.mvc.annotation.argument;
 
 import static org.easymock.EasyMock.expect;
 
@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
+import org.impalaframework.extension.mvc.BaseResolverTest;
+import org.impalaframework.extension.mvc.annotation.argument.RequestParameterMapArgumentResolver;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.ReflectionUtils;
 

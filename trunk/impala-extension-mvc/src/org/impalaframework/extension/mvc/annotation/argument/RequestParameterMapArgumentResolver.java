@@ -1,4 +1,4 @@
-package org.impalaframework.extension.mvc;
+package org.impalaframework.extension.mvc.annotation.argument;
 
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.impalaframework.extension.mvc.annotation.RequestBody;
+import org.impalaframework.extension.mvc.annotation.RequestParameterMap;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.context.request.NativeWebRequest;
 

@@ -4,7 +4,7 @@ import junit.framework.TestSuite;
 import org.impalaframework.extension.application.suite.AutomatedModuleTests;
 import org.impalaframework.extension.event.suite.AutomatedEventTests;
 import org.impalaframework.extension.web.suite.AutomatedWebTests;
-import org.impalaframework.extension.mvc.AutomatedMvcTests;
+import org.impalaframework.extension.mvc.suite.AutomatedMvcTests;
 import org.impalaframework.extension.root.suite.AutomatedRootTests;
 
 public class AllTests extends TestCase {
