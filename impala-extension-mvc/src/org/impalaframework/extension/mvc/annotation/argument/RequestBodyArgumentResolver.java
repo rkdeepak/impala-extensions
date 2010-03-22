@@ -1,4 +1,4 @@
-package org.impalaframework.extension.mvc;
+package org.impalaframework.extension.mvc.annotation.argument;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 
+import org.impalaframework.extension.mvc.annotation.RequestBody;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.context.request.NativeWebRequest;

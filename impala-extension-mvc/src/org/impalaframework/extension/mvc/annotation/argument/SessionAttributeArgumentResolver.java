@@ -1,5 +1,6 @@
-package org.impalaframework.extension.mvc;
+package org.impalaframework.extension.mvc.annotation.argument;
 
+import org.impalaframework.extension.mvc.annotation.SessionAttribute;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.WebRequest;

@@ -1,22 +1,28 @@
-package org.impalaframework.extension.mvc;
+package org.impalaframework.extension.mvc.annotation.argument;
 
 import static org.easymock.EasyMock.expect;
 
+import java.io.IOException;
+
+import javax.servlet.ServletInputStream;
+
+import org.impalaframework.extension.mvc.BaseResolverTest;
+import org.impalaframework.extension.mvc.annotation.argument.RequestBodyArgumentResolver;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.ReflectionUtils;
 
-public class RequestHeaderTest extends BaseResolverTest {
+public class RequestBodyTest extends BaseResolverTest {
 
-	private RequestHeaderArgumentResolver resolver;
+	private RequestBodyArgumentResolver resolver;
 	
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
-		resolver = new RequestHeaderArgumentResolver();
+		resolver = new RequestBodyArgumentResolver();
 	}
 	
 	public void testAttribute() throws Exception {
-		assertEquals("value", doRequestAttribute("requestHeader", "attribute", "value"));
+		assertEquals("", doRequestAttribute("requestBody", "attribute", "value"));
 	}
 
 	private Object doRequestAttribute(String methodName, final String attributeName, final String value)
@@ -25,7 +31,13 @@ public class RequestHeaderTest extends BaseResolverTest {
 		MethodParameter methodParameter = new MethodParameter(ReflectionUtils.findMethod(AnnotatedClass.class, methodName, new Class[]{ String.class }), 0);
 
 		expect(nativeRequest.getNativeRequest()).andReturn(request);
-		expect(request.getHeader(attributeName)).andReturn(value);
+		expect(request.getInputStream()).andReturn(new ServletInputStream() {
+			
+			@Override
+			public int read() throws IOException {
+				return -1;
+			}
+		});
 		
 		replayMocks();
 		

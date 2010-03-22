@@ -1,4 +1,4 @@
-package org.impalaframework.extension.mvc;
+package org.impalaframework.extension.mvc.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
