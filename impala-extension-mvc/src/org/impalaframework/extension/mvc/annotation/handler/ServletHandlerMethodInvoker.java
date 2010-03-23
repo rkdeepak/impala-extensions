@@ -106,7 +106,6 @@ public class ServletHandlerMethodInvoker {
 			collection = assembleArgumentCollectors(handlerMethod, handler, webRequest, implicitModel);
 		}
 		
-		//FIXME build argument collector
 		Class<?>[] parameterTypes = handlerMethod.getParameterTypes();
 		Object[] arguments = new Object[parameterTypes.length];
 		for (int i = 0; i < parameterTypes.length; i++) {
@@ -129,7 +128,8 @@ public class ServletHandlerMethodInvoker {
 	public ModelAndView getModelAndView(Method handlerMethod, Class<? extends Object> handlerType,
 			Object returnValue, ExtendedModelMap implicitModel, ServletWebRequest webRequest) {
 		
-		//FIXME test
+		//FIXME as with ArgumentCollectors, ideally, these should have a similar return result resolving 
+		//interface whose implementation instance could be cached against the method
 		
 		if (returnValue instanceof String) {
 			return new ModelAndView((String) returnValue).addAllObjects(implicitModel);
