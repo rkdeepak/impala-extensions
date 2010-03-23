@@ -7,8 +7,8 @@
   </license>
 </licenses>
 <scm>
-  <connection>scm:svn:http://impala.googlecode.com/svn/trunk</connection>
-  <url>http://code.google.com/p/impala/source/browse/trunk</url>
+  <connection>scm:svn:http://impala-extensions.googlecode.com/svn/trunk</connection>
+  <url>http://code.google.com/p/impala-extensions/source/browse/trunk</url>
 </scm>
 <developers>
   <developer>
