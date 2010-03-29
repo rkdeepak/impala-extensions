@@ -19,18 +19,23 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.impalaframework.extension.mvc.annotation.handler.LightweightAnnotationHandlerAdapter;
 import org.impalaframework.extension.mvc.util.RequestModelHelper;
 import org.impalaframework.util.MemoryUtils;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StopWatch;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
 
-public class FlashStateEnabledLightweightHandlerAdapter extends AnnotationMethodHandlerAdapter {
+public class FlashStateEnabledLightweightHandlerAdapter extends LightweightAnnotationHandlerAdapter {
 	
 	public static Log logger = LogFactory.getLog(FlashStateEnabledLightweightHandlerAdapter.class);
 	
 	private FlashHelper flashHelper = new FlashHelper();
+	
+	@Override
+	public boolean supports(Object handler) {
+		return super.hasHandlerAnnotation(handler, FlashEnabledAdaptable.class);
+	}
 	
 	public ModelAndView handle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
