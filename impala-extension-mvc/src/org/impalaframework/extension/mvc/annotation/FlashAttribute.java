@@ -14,23 +14,20 @@
 
 package org.impalaframework.extension.mvc.annotation;
 
-import java.lang.annotation.Annotation;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import org.springframework.core.MethodParameter;
-import org.springframework.util.ReflectionUtils;
+@Target(ElementType.PARAMETER)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface FlashAttribute {
 
-public class WebAnnotationUtils {
-
-	public static final String ARGUMENT_PENDING = ".ARGUMENT_PENDING";
-	
-	public static Annotation[] getAnnotations(MethodParameter methodParameter, String methodName) {
-		try {
-			return (Annotation[]) 
-				ReflectionUtils.invokeMethod(methodParameter.getClass().getMethod(methodName, new Class[0]), methodParameter);
-		}
-		catch (NoSuchMethodException e) {
-			throw new IllegalArgumentException("No method found: " + methodName, e);
-		}
-	}
+	/**
+	 * The session attribute to bind to.
+	 */
+	String value();
 
 }
