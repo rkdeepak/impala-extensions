@@ -17,6 +17,7 @@ package org.impalaframework.extension.mvc.annotation.handler;
 import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.impalaframework.extension.mvc.annotation.WebAnnotationUtils;
 import org.impalaframework.extension.mvc.annotation.collector.ArgumentCollector;
 import org.impalaframework.extension.mvc.annotation.collector.ArgumentCollectorHelper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.support.WebArgumentResolver;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
@@ -170,15 +172,24 @@ public class ServletHandlerMethodInvoker {
 			NativeWebRequest webRequest, 
 			ExtendedModelMap implicitModel) {
 		
-		Class<?>[] parameterTypes = handlerMethod.getParameterTypes();
+		webRequest.setAttribute(WebAnnotationUtils.ARGUMENT_PENDING, Boolean.TRUE, WebRequest.SCOPE_REQUEST);
 		
-		ArgumentCollector[] collection = new ArgumentCollector[parameterTypes.length];
-		for (int i = 0; i < parameterTypes.length; i++) {
+		ArgumentCollector[] collection;
+		try {
 			
-			collection[i] = argumentCollectorHelper.getArgumentCollector(handlerMethod, webRequest, i);
-		}
+			Class<?>[] parameterTypes = handlerMethod.getParameterTypes();
+			
+			collection = new ArgumentCollector[parameterTypes.length];
+			for (int i = 0; i < parameterTypes.length; i++) {
+				
+				collection[i] = argumentCollectorHelper.getArgumentCollector(handlerMethod, webRequest, i);
+			}
 
-		argumentCollectors.put(handlerMethod, collection);
+			argumentCollectors.put(handlerMethod, collection);
+			
+		} finally {
+			webRequest.removeAttribute(WebAnnotationUtils.ARGUMENT_PENDING, WebRequest.SCOPE_REQUEST);
+		}
 		return collection;
 	}
 

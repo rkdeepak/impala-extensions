@@ -26,7 +26,7 @@ import org.springframework.web.context.request.NativeWebRequest;
  * @author Phil Zoio
  */
 public abstract class BaseAttributeArgumentResolver implements WebArgumentResolver {
-
+	
 	public Object resolveArgument(MethodParameter methodParameter,
 			NativeWebRequest webRequest) throws Exception {
 		
