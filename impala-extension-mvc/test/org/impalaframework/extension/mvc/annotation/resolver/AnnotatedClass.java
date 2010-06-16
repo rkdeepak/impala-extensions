@@ -14,6 +14,7 @@
 
 package org.impalaframework.extension.mvc.annotation.resolver;
 
+import org.impalaframework.extension.mvc.annotation.CookieValue;
 import org.impalaframework.extension.mvc.annotation.RequestAttribute;
 import org.impalaframework.extension.mvc.annotation.RequestBody;
 import org.impalaframework.extension.mvc.annotation.RequestHeader;
@@ -27,5 +28,6 @@ public class AnnotatedClass {
 	public void requestHeader(@RequestHeader("attribute") String name){}
 	public void requestBody(@RequestBody("UTF8") String name){}
 	public void requestParameterMap(@RequestParameterMap String name){}
+	public void cookieValue(@CookieValue("cookie") String name){}
 
 }

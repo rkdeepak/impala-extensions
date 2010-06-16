@@ -23,6 +23,7 @@ import org.impalaframework.extension.mvc.annotation.collector.ModelArgumentColle
 import org.impalaframework.extension.mvc.annotation.collector.RequestParameterArgumentCollectorTest;
 import org.impalaframework.extension.mvc.annotation.handler.AnnotationHandlerMethodResolverTest;
 import org.impalaframework.extension.mvc.annotation.handler.LightweightAnnotationHandlerAdapterTest;
+import org.impalaframework.extension.mvc.annotation.resolver.CookieValueTest;
 import org.impalaframework.extension.mvc.annotation.resolver.RequestAttributeTest;
 import org.impalaframework.extension.mvc.annotation.resolver.RequestBodyTest;
 import org.impalaframework.extension.mvc.annotation.resolver.RequestHeaderTest;
@@ -37,6 +38,7 @@ public class AutomatedMvcTests extends TestCase {
 		TestSuite suite = new TestSuite();
 		
 		suite.addTestSuite(FlashHelperTest.class);
+		suite.addTestSuite(CookieValueTest.class);
 		suite.addTestSuite(RequestAttributeTest.class);
 		suite.addTestSuite(RequestBodyTest.class);
 		suite.addTestSuite(RequestHeaderTest.class);
