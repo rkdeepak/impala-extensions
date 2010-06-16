@@ -66,6 +66,24 @@ public class FlashHelperTest extends TestCase {
 		verify(request, session);
 	}
 	
+	public void testSetSessionPrefix() throws Exception {
+		
+		adapter = new FlashHelper("pref:");
+		
+		HashMap<String, Object> flashMap = new HashMap<String, Object>();
+		flashMap.put("flash:one", "v1");
+		
+		HashMap<String, String> setMap = new HashMap<String, String>();
+		setMap.put("one", "v1");
+
+		expect(request.getSession()).andReturn(session);
+		session.setAttribute("pref:flashState", setMap);
+		
+		replay(request, session);
+		adapter.setFlashState(request, flashMap);
+		verify(request, session);
+	}
+	
 	public void testUnpackFlashState() throws Exception {
 
 		expect(request.getSession(false)).andReturn(session);
@@ -76,6 +94,32 @@ public class FlashHelperTest extends TestCase {
 		expect(session.getAttribute("flashState")).andReturn(setMap);
 		request.setAttribute("flashState", setMap);
 		session.removeAttribute("flashState");
+		
+		//assume one is not present
+		expect(request.getAttribute("one")).andReturn(null);
+		request.setAttribute("one", "v1");
+
+		//assume two is present
+		expect(request.getAttribute("two")).andReturn("somethingelse");
+		
+		replay(request, session);
+		adapter.unpackFlashState(request);
+		verify(request, session);
+	}
+	
+
+	public void testUnpackSessionPrefix() throws Exception {
+		
+		adapter = new FlashHelper("pref:");
+
+		expect(request.getSession(false)).andReturn(session);
+		
+		HashMap<String, String> setMap = new LinkedHashMap<String, String>();
+		setMap.put("one", "v1");
+		setMap.put("two", "v2");
+		expect(session.getAttribute("pref:flashState")).andReturn(setMap);
+		request.setAttribute("flashState", setMap);
+		session.removeAttribute("pref:flashState");
 		
 		//assume one is not present
 		expect(request.getAttribute("one")).andReturn(null);

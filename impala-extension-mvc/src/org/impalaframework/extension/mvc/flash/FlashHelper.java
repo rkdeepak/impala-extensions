@@ -29,6 +29,17 @@ import org.springframework.ui.ModelMap;
  */
 @SuppressWarnings("unchecked")
 public class FlashHelper {
+	
+	private String sessionPrefix;
+	
+	public FlashHelper() {
+		this.sessionPrefix = "";
+	}
+
+	public FlashHelper(String sessionPrefix) {
+		super();
+		this.sessionPrefix = sessionPrefix;
+	}
 
 	public void beforeHandleRequest(HttpServletRequest request) {
 		//unpack flash state from session into request
@@ -47,10 +58,10 @@ public class FlashHelper {
 		
 		final HttpSession session = request.getSession(false);
 		if (session != null) {
-			final Map<String,Object> flashState = (Map<String, Object>) session.getAttribute("flashState");
+			final Map<String,Object> flashState = (Map<String, Object>) session.getAttribute(sessionPrefix+"flashState");
 			if (flashState != null) {
 				request.setAttribute("flashState", flashState);
-				session.removeAttribute("flashState");
+				session.removeAttribute(sessionPrefix+"flashState");
 				
 				Set<String> flashKeys = flashState.keySet();
 				for (String flashKey : flashKeys) {
@@ -72,7 +83,7 @@ public class FlashHelper {
 	}
 
 	void setFlashState(HttpServletRequest request,
-			ModelMap modelMap) {
+			Map modelMap) {
 		
 		final Set keys = modelMap.keySet();
 		Map<String,Object> flashState = null;
@@ -87,7 +98,7 @@ public class FlashHelper {
 		}
 		
 		if (flashState != null) {
-			request.getSession().setAttribute("flashState", flashState);
+			request.getSession().setAttribute(sessionPrefix+"flashState", flashState);
 		}
 	}
 
