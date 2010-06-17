@@ -41,6 +41,9 @@ public class CookieValueArgumentResolver extends BaseAttributeArgumentResolver {
 	protected Object getValue(NativeWebRequest webRequest, String attributeName) {
 		HttpServletRequest request = ObjectUtils.cast(webRequest.getNativeRequest(), HttpServletRequest.class);
 		final Cookie[] cookies = request.getCookies();
+		if (cookies == null) {
+			return null;
+		}
 		for (Cookie cookie : cookies) {
 			final String name = cookie.getName();
 			if (name.equals(attributeName)) {
