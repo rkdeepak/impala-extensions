@@ -2,7 +2,10 @@ package org.impalaframework.extension.event;
 
 import org.springframework.util.Assert;
 
-
+/**
+ * Default implementation of {@link EventService}, backed by both a synchronous and an asynchronous {@link EventService} instance.
+ * @author Phil Zoio
+ */
 public class DefaultEventService implements EventService {
 	
 	private EventDAO eventDAO;

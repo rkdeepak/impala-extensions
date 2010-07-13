@@ -1,12 +1,15 @@
 package org.impalaframework.extension.event;
 
-
 import java.io.Serializable;
 import java.util.Date;
 
 import org.joda.time.DateTime;
 import org.springframework.util.ObjectUtils;
 
+/**
+ * Represents a single event
+ * @author Phil Zoio
+ */
 public class Event implements Serializable, Comparable<Event> {
 
 	private static final long serialVersionUID = 1L;

@@ -8,6 +8,10 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
+/**
+ * Extends {@link EventTask} to support persistence of {@link Event}
+ * @author Phil Zoio
+ */
 public class RecordingEventTask extends EventTask {
 	
 	private static final Log logger = LogFactory.getLog(RecordingEventTask.class);
