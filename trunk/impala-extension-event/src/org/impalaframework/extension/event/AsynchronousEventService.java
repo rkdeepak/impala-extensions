@@ -14,6 +14,10 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.Assert;
 
+/**
+ * Implementation of {@link EventService} which is backed by a {@link PriorityBlockingQueue} queue.
+ * @author Phil Zoio
+ */
 public class AsynchronousEventService implements EventService, InitializingBean, DisposableBean {
 
 	private final Log log = LogFactory.getLog(AsynchronousEventService.class);

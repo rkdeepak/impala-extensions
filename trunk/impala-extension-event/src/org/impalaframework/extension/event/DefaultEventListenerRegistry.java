@@ -8,7 +8,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.springframework.util.Assert;
 
-//FIXME test
+/**
+ * Implementation of {@link EventListenerRegistry}
+ * @author Phil Zoio
+ */
 public class DefaultEventListenerRegistry implements EventListenerRegistry {
 	
 	private Map<String, List<EventListener>> eventListeners = new ConcurrentHashMap<String, List<EventListener>>();

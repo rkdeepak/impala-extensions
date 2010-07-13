@@ -3,6 +3,10 @@ package org.impalaframework.extension.event;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * Simple test implementation of {@link EventSynchronizer}
+ * @author Phil Zoio
+ */
 public class SimpleEventSynchronizer implements EventSynchronizer {
 	
 	private Set<EventTask> submitted = new LinkedHashSet<EventTask>();

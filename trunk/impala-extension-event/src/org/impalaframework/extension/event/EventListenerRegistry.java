@@ -4,7 +4,6 @@ import java.util.List;
 
 /**
  * Defines interface for managing a collection of event listeners, keyed by type.
- * 
  * @author Phil Zoio
  */
 public interface EventListenerRegistry {

@@ -2,23 +2,32 @@ package org.impalaframework.extension.event;
 
 import org.joda.time.Period;
 
+/**
+ * Represents the type of an {@link Event}, against which listeners will register
+ * @author Phil Zoio
+ */
 public class EventType {
 	
 	private static final Period defaultTargetDelay = new Period().withMinutes(30);
 
-	// the type of the event, which listeners will need to know about
-	// mandatory
+	/** 
+	 * The type of the event, which listeners will need to know about
+	 */
 	final private String type;
 
-	// a flag indicating that the event should be persisted
+	/**
+	 * A flag indicating that the event should be persisted
+	 */
 	final private boolean persistent;
 
-	// the delay that ordinarily should not be exceeded before the event is
-	// processed
+	/**
+	 * The delay that ordinarily should not be exceeded before the event is processed
+	 */
 	final private Period targetDelay;
 
-	// a flag indicating that this event should be added to the in-process event
-	// handling queue
+	/**
+	 *  A flag indicating that this event should be added to the in-process event handling queue
+	 */
 	final private boolean handleInProcess;
 
 	public EventType(String type) {

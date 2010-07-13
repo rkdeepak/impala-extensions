@@ -3,6 +3,10 @@ package org.impalaframework.extension.event;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.util.Assert;
 
+/**
+ * {@link EventTaskFactory} which generates instances of {@link RecordingEventTask}
+ * @author Phil Zoio
+ */
 public class RecordingEventTaskFactory implements EventTaskFactory {
 	
 	private PlatformTransactionManager transactionManager;
