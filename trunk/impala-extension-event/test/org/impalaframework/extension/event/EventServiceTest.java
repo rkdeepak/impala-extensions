@@ -38,6 +38,9 @@ public class EventServiceTest extends TestCase {
 			
 		};
 		
+		service.setDelayInMilliseconds(0);
+		service.setPollIntervalInMilliseconds(10);
+		
 		DefaultEventListenerRegistry registry = new DefaultEventListenerRegistry();
 		service.setEventListenerRegistry(registry);
 		SimpleEventSynchronizer eventSynchronizer = new SimpleEventSynchronizer();
