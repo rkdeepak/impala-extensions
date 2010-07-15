@@ -2,9 +2,10 @@ package org.impalaframework.extension.event;
 
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.logging.Log;
@@ -24,7 +25,7 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 
 	private PriorityBlockingQueue<Object> priorityEventQueue = new PriorityBlockingQueue<Object>();
 
-	private ExecutorService queueExecutorService;
+	private ScheduledExecutorService queueExecutorService;
 
 	private EventListenerRegistry eventListenerRegistry;
 	
@@ -33,6 +34,10 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 	private EventSynchronizer eventSynchronizer;
 	
 	private static final int DEFAULT_POLL_INTERVAL = 1000;
+	
+	private static final int DEFAULT_DELAY = 1000;
+
+	private Integer delayInMilliseconds;
 	
 	private Integer pollIntervalInMilliseconds;
 
@@ -71,18 +76,23 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 			pollIntervalInMilliseconds = DEFAULT_POLL_INTERVAL;
 		}
 		
+		if (delayInMilliseconds == null) {
+			delayInMilliseconds = DEFAULT_DELAY;
+		}
+		
 		log.info("Starting event manager");
 
-		queueExecutorService = Executors.newSingleThreadExecutor();
+		queueExecutorService = Executors.newSingleThreadScheduledExecutor();
 		started.set(true);
 
-		queueExecutorService.execute(new Runnable() {
+		queueExecutorService.scheduleAtFixedRate(new Runnable() {
 			public void run() {
-				while (started.get()) {
-					consumeQueuedEvent();
-				}
+				consumeQueuedEvent();
 			}
-		});
+		},
+		delayInMilliseconds,
+		pollIntervalInMilliseconds,
+		TimeUnit.MILLISECONDS);
 
 		log.info("Finished starting event manager");
 	}
@@ -247,6 +257,10 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 
 	public void setPollIntervalInMilliseconds(Integer pollIntervalInMilliseconds) {
 		this.pollIntervalInMilliseconds = pollIntervalInMilliseconds;
+	}
+	
+	public void setDelayInMilliseconds(Integer delayInMilliseconds) {
+		this.delayInMilliseconds = delayInMilliseconds;
 	}
 
 }
