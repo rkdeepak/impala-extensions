@@ -1,10 +1,10 @@
 package org.impalaframework.extension.event;
 
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.logging.Log;
@@ -55,7 +55,7 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 		} catch (ClassCastException e) {
 			//got this in here because of peculiar bug on Mac OSX JVM which appears to have
 			//no functional impact other than throwing ClassCastException
-			e.printStackTrace();
+			log.error("Unexpected class cast exception.", e);
 		}
 	}
 
@@ -124,18 +124,28 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 
 		try {
 
-			// try every second to get an event
-			// we do this because we don't want this to hang
-			// indefinitely
-			Event event = (Event) priorityEventQueue.poll(pollIntervalInMilliseconds, TimeUnit.MILLISECONDS);
+			Event event = (Event) priorityEventQueue.peek();
 
 			if (event != null) {
 
 				if (log.isDebugEnabled()) {
 					log.debug("Removing event " + event + " from the event queue");
 				}
+				
+				final Date processedByDate = event.getProcessedByDate();
+				if (processedByDate.getTime() <= System.currentTimeMillis()) {
 
-				processQueuedEvent(event);
+					if (log.isDebugEnabled()) {
+						log.debug("Processing event: " + event);
+					}
+					
+					priorityEventQueue.poll();
+					processQueuedEvent(event);
+				} else {
+					if (log.isDebugEnabled()) {
+						System.out.println("Not processing event: still waiting as process by date is still in the future " + processedByDate);
+					}
+				}
 			} else {
 
 				if (log.isDebugEnabled()) {
@@ -144,9 +154,8 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 			}
 		}
 		catch (Exception e) {
-
+			log.error("Error processing queued event", e);
 		}
-
 	}
 
 	private void processQueuedEvent(Event event) {
@@ -162,12 +171,14 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 		}
 		
 		for (EventListener eventListener : list) {			
+			final String consumerName = eventListener.getConsumerName();
 			try {
-				
-				System.out.println("processing" + eventListener);
+
 				EventTask eventTask = newEventTask(event, eventListener);
-				System.out.println("event task: " + eventTask);
-				if (log.isDebugEnabled()) log.debug("Processing queue for listener " + eventListener.getConsumerName() + " for event: " + event);
+				
+				if (log.isDebugEnabled()){
+					log.debug("Processing queue for listener '" + consumerName + "' for event: " + event);
+				}
 
 				if (transactionActive) {
 					//transaction active so need to wait for eventSynchronizer to handle this
@@ -177,10 +188,21 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 					eventSynchronizer.submitTask(eventTask);
 				}				
 			} catch (Exception e) {
-				//FIXME do something about this
-				e.printStackTrace();
+				try {
+					onEventError(event, eventListener, e);
+				} catch (Exception ee) {
+					log.error("Event error logging failed: " + ee, ee);
+					log.error("Original error: " + e.getMessage(), e);		
+				}
 			}
 		}
+	}
+
+	/**
+	 * Logs an event error. Subclasses can override this to handle special processing
+	 */
+	protected void onEventError(Event event, EventListener eventListener, Exception e) {
+		log.error("Failed to successfully perform event processing using listener: " + eventListener.getConsumerName(), e);
 	}
 
 	protected EventTask newEventTask(Event Event, EventListener eventListener) {
