@@ -126,29 +126,31 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 
 			Event event = (Event) priorityEventQueue.peek();
 
+			final boolean debug = log.isDebugEnabled();
+			
 			if (event != null) {
 
-				if (log.isDebugEnabled()) {
+				if (debug) {
 					log.debug("Removing event " + event + " from the event queue");
 				}
 				
 				final Date processedByDate = event.getProcessedByDate();
 				if (processedByDate.getTime() <= System.currentTimeMillis()) {
 
-					if (log.isDebugEnabled()) {
+					if (debug) {
 						log.debug("Processing event: " + event);
 					}
 					
-					priorityEventQueue.poll();
+					priorityEventQueue.remove(event);
 					processQueuedEvent(event);
 				} else {
-					if (log.isDebugEnabled()) {
+					if (debug) {
 						System.out.println("Not processing event: still waiting as process by date is still in the future " + processedByDate);
 					}
 				}
 			} else {
 
-				if (log.isDebugEnabled()) {
+				if (debug) {
 					log.debug("No event found on queue");
 				}
 			}
