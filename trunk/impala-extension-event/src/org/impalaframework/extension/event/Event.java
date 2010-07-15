@@ -121,6 +121,10 @@ public class Event implements Serializable, Comparable<Event> {
 	public Date getDateTime() {
 		return dateTime;
 	}
+	
+	public Date getProcessedByDate() {
+		return processedByDate;
+	}
 
 	@Override
 	public String toString() {

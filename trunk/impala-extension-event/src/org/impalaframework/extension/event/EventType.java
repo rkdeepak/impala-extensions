@@ -8,7 +8,7 @@ import org.joda.time.Period;
  */
 public class EventType {
 	
-	private static final Period defaultTargetDelay = new Period().withMinutes(30);
+	private static final Period defaultTargetDelay = new Period().withMinutes(1);
 
 	/** 
 	 * The type of the event, which listeners will need to know about
