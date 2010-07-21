@@ -21,7 +21,7 @@ import org.springframework.util.Assert;
  */
 public class AsynchronousEventService implements EventService, InitializingBean, DisposableBean {
 
-	private final Log log = LogFactory.getLog(AsynchronousEventService.class);
+	private static final Log logger = LogFactory.getLog(AsynchronousEventService.class);
 
 	private PriorityBlockingQueue<Object> priorityEventQueue = new PriorityBlockingQueue<Object>();
 
@@ -51,8 +51,8 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 			throw new IllegalStateException("Cannot accept events as event manager has stopped");
 		}
 
-		if (log.isDebugEnabled()) {
-			log.debug("Adding event " + event + " to the event queue");
+		if (logger.isDebugEnabled()) {
+			logger.debug("Adding event " + event + " to the event queue");
 		}
 
 		try {
@@ -60,7 +60,7 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 		} catch (ClassCastException e) {
 			//got this in here because of peculiar bug on Mac OSX JVM which appears to have
 			//no functional impact other than throwing ClassCastException
-			log.error("Unexpected class cast exception.", e);
+			logger.error("Unexpected class cast exception.", e);
 		}
 	}
 
@@ -80,7 +80,7 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 			delayInMilliseconds = DEFAULT_DELAY;
 		}
 		
-		log.info("Starting event manager");
+		logger.info("Starting event manager");
 
 		queueExecutorService = Executors.newSingleThreadScheduledExecutor();
 		started.set(true);
@@ -94,12 +94,12 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 		pollIntervalInMilliseconds,
 		TimeUnit.MILLISECONDS);
 
-		log.info("Finished starting event manager");
+		logger.info("Finished starting event manager");
 	}
 
 	public void stop() {
 
-		log.info("Stopping event manager");
+		logger.info("Stopping event manager");
 
 		started.set(false);
 		if (!queueExecutorService.isShutdown()) {
@@ -112,7 +112,7 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 		//remove listeners
 		eventListenerRegistry.clear();
 
-		log.info("Finished stopping event manager");
+		logger.info("Finished stopping event manager");
 	}
 
 	/* ******************** Spring life cycle methods methods ****************** */
@@ -136,19 +136,19 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 
 			Event event = (Event) priorityEventQueue.peek();
 
-			final boolean debug = log.isDebugEnabled();
+			final boolean debug = logger.isDebugEnabled();
 			
 			if (event != null) {
 
 				if (debug) {
-					log.debug("Removing event " + event + " from the event queue");
+					logger.debug("Removing event " + event + " from the event queue");
 				}
 				
 				final Date processedByDate = event.getProcessedByDate();
 				if (processedByDate.getTime() <= System.currentTimeMillis()) {
 
 					if (debug) {
-						log.debug("Processing event: " + event);
+						logger.debug("Processing event: " + event);
 					}
 					
 					priorityEventQueue.remove(event);
@@ -161,12 +161,12 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 			} else {
 
 				if (debug) {
-					log.debug("No event found on queue");
+					logger.debug("No event found on queue");
 				}
 			}
 		}
 		catch (Exception e) {
-			log.error("Error processing queued event", e);
+			logger.error("Error processing queued event", e);
 		}
 	}
 
@@ -177,9 +177,9 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 
 		boolean transactionActive = isTransactionActive();
 		
-		if (log.isDebugEnabled()) {
-			log.debug("Listeners for type " + list);
-			log.debug("Transaction active " + transactionActive);
+		if (logger.isDebugEnabled()) {
+			logger.debug("Registered asynchronous listeners registered for type " + type + ": " + list);
+			logger.debug("Transaction active " + transactionActive);
 		}
 		
 		for (EventListener eventListener : list) {			
@@ -188,8 +188,8 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 
 				EventTask eventTask = newEventTask(event, eventListener);
 				
-				if (log.isDebugEnabled()){
-					log.debug("Processing queue for listener '" + consumerName + "' for event: " + event);
+				if (logger.isDebugEnabled()){
+					logger.debug("Processing queue for listener '" + consumerName + "' for event: " + event);
 				}
 
 				if (transactionActive) {
@@ -203,8 +203,8 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 				try {
 					onEventError(event, eventListener, e);
 				} catch (Exception ee) {
-					log.error("Event error logging failed: " + ee, ee);
-					log.error("Original error: " + e.getMessage(), e);		
+					logger.error("Event error logging failed: " + ee, ee);
+					logger.error("Original error: " + e.getMessage(), e);		
 				}
 			}
 		}
@@ -214,7 +214,7 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 	 * Logs an event error. Subclasses can override this to handle special processing
 	 */
 	protected void onEventError(Event event, EventListener eventListener, Exception e) {
-		log.error("Failed to successfully perform event processing using listener: " + eventListener.getConsumerName(), e);
+		logger.error("Failed to successfully perform event processing using listener: " + eventListener.getConsumerName(), e);
 	}
 
 	protected EventTask newEventTask(Event Event, EventListener eventListener) {
