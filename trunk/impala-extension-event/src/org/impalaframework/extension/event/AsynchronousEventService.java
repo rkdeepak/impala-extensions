@@ -131,42 +131,49 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 	 * Consume queued events
 	 */
 	protected void consumeQueuedEvent() {
+		
+		boolean look = true;
 
-		try {
-
-			Event event = (Event) priorityEventQueue.peek();
-
-			final boolean debug = logger.isDebugEnabled();
+		while (look) {
 			
-			if (event != null) {
-
-				if (debug) {
-					logger.debug("Removing event " + event + " from the event queue");
-				}
+			try {
+	
+				Event event = (Event) priorityEventQueue.peek();
+	
+				final boolean debug = logger.isDebugEnabled();
 				
-				final Date processedByDate = event.getProcessedByDate();
-				if (processedByDate.getTime() <= System.currentTimeMillis()) {
-
+				if (event != null) {
+	
 					if (debug) {
-						logger.debug("Processing event: " + event);
+						logger.debug("Removing event " + event + " from the event queue");
 					}
 					
-					priorityEventQueue.remove(event);
-					processQueuedEvent(event);
-				} else {
-					if (debug) {
-						System.out.println("Not processing event: still waiting as process by date is still in the future " + processedByDate);
+					final Date processedByDate = event.getProcessedByDate();
+					if (processedByDate.getTime() <= System.currentTimeMillis()) {
+	
+						if (debug) {
+							logger.debug("Processing event: " + event);
+						}
+						
+						priorityEventQueue.remove(event);
+						processQueuedEvent(event);
+					} else {
+						if (debug) {
+							System.out.println("Not processing event: still waiting as process by date is still in the future " + processedByDate);
+						}
 					}
-				}
-			} else {
-
-				if (debug) {
-					logger.debug("No event found on queue");
+				} else {
+	
+					if (debug) {
+						logger.debug("No event found on queue");
+					}
+					
+					look = false;
 				}
 			}
-		}
-		catch (Exception e) {
-			logger.error("Error processing queued event", e);
+			catch (Exception e) {
+				logger.error("Error processing queued event", e);
+			}
 		}
 	}
 
