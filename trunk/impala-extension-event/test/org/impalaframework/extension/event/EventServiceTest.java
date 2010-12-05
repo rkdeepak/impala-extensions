@@ -43,8 +43,6 @@ public class EventServiceTest extends TestCase {
 		
 		DefaultEventListenerRegistry registry = new DefaultEventListenerRegistry();
 		service.setEventListenerRegistry(registry);
-		SimpleEventSynchronizer eventSynchronizer = new SimpleEventSynchronizer();
-		service.setEventSynchronizer(eventSynchronizer);
 		service.setEventTaskFactory(new SimpleEventTaskFactory());
 		
 		Event[] events = Event();

@@ -13,7 +13,7 @@ public class EventTask implements Runnable {
 
 	private static final Log logger = LogFactory.getLog(EventTask.class);
 	
-	final private Event Event;
+	final private Event event;
 
 	final private EventListener eventListener;
 
@@ -23,15 +23,19 @@ public class EventTask implements Runnable {
 		super();
 		Assert.notNull(Event);
 		Assert.notNull(eventListener);
-		this.Event = Event;
+		this.event = Event;
 		this.eventListener = eventListener;
 	}
 
 	public void run() {
+		runInternal();
+	}
+
+	protected void runInternal() {
 		try {
-			eventListener.onEvent(Event);
+			eventListener.onEvent(event);
 		} catch (Throwable e) {
-			logger.error("Uncaught error running event: " + Event + ". Message: " + e.getMessage(), e);
+			logger.error("Uncaught error running event: " + event + ". Message: " + e.getMessage(), e);
 			if (e instanceof RuntimeException) {
 				throw (RuntimeException) e;
 			} else {
@@ -41,7 +45,7 @@ public class EventTask implements Runnable {
 	}
 
 	protected Event getEvent() {
-		return Event;
+		return event;
 	}
 
 	protected EventListener getEventListener() {

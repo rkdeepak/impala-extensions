@@ -31,8 +31,6 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 	
 	private EventTaskFactory eventTaskFactory;
 	
-	private EventSynchronizer eventSynchronizer;
-	
 	private static final int DEFAULT_POLL_INTERVAL = 1000;
 	
 	private static final int DEFAULT_DELAY = 1000;
@@ -70,7 +68,6 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 
 		Assert.notNull(eventListenerRegistry, "eventListenerRegistry cannot be null");
 		Assert.notNull(eventTaskFactory, "eventTaskFactory cannot be null");
-		Assert.notNull(eventSynchronizer, "eventSynchronizer cannot be null");
 		
 		if (pollIntervalInMilliseconds == null) {
 			pollIntervalInMilliseconds = DEFAULT_POLL_INTERVAL;
@@ -181,12 +178,9 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 		
 		String type = event.getEventType().getType();		
 		List<EventListener> list = eventListenerRegistry.getEventListeners(type);
-
-		boolean transactionActive = isTransactionActive();
 		
 		if (logger.isDebugEnabled()) {
 			logger.debug("Registered asynchronous listeners registered for type " + type + ": " + list);
-			logger.debug("Transaction active " + transactionActive);
 		}
 		
 		for (EventListener eventListener : list) {			
@@ -199,13 +193,7 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 					logger.debug("Processing queue for listener '" + consumerName + "' for event: " + event);
 				}
 
-				if (transactionActive) {
-					//transaction active so need to wait for eventSynchronizer to handle this
-					eventSynchronizer.awaitTransactionCompletion(eventTask);
-				}
-				else {
-					eventSynchronizer.submitTask(eventTask);
-				}				
+				eventTask.run();
 			} catch (Exception e) {
 				try {
 					onEventError(event, eventListener, e);
@@ -252,10 +240,6 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 
 	public void setEventTaskFactory(EventTaskFactory eventTaskFactory) {
 		this.eventTaskFactory = eventTaskFactory;
-	}
-
-	public void setEventSynchronizer(EventSynchronizer eventSynchronizer) {
-		this.eventSynchronizer = eventSynchronizer;
 	}
 
 	public void setEventListenerRegistry(EventListenerRegistry eventListenerRegistry) {
