@@ -20,9 +20,14 @@ public class RecordingEventTask extends EventTask {
 
 	private final EventDAO eventDAO;
 
-	public RecordingEventTask(PlatformTransactionManager transactionManager, EventDAO eventDAO, EventSynchronizer eventSynchronizer,
-			Event event, EventListener eventListener) {
+	public RecordingEventTask(
+			PlatformTransactionManager transactionManager, 
+			EventDAO eventDAO, 
+			Event event,
+			EventListener eventListener) {
+		
 		super(event, eventListener);
+		
 		Assert.notNull(eventDAO);
 		Assert.notNull(transactionManager);
 		this.eventDAO = eventDAO;
