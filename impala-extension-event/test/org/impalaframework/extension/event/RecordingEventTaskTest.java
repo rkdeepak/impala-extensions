@@ -15,8 +15,6 @@ public class RecordingEventTaskTest extends TestCase {
 
 	private Event event;
 
-	private EventSynchronizer eventSynchronizer;
-
 	private PlatformTransactionManager transactionManager;
 
 	private EventDAO eventDAO;
@@ -24,7 +22,6 @@ public class RecordingEventTaskTest extends TestCase {
 	public void setUp() {
 		eventType = new EventType("mytype");
 		event = new Event(eventType, "user", "1", "mytype");
-		eventSynchronizer = new SimpleEventSynchronizer();
 		transactionManager = new DummyTransactionManager();
 		eventDAO = createMock(EventDAO.class);
 	}
@@ -32,7 +29,7 @@ public class RecordingEventTaskTest extends TestCase {
 	public void testRunWithNoId() {
 		TestEventListener eventListener = new TestEventListener("runWithRecording");
 		eventListener.setMarkProcessed(true);
-		RecordingEventTask eventTask = new RecordingEventTask(transactionManager, eventDAO, eventSynchronizer, event, eventListener);
+		RecordingEventTask eventTask = new RecordingEventTask(transactionManager, eventDAO, event, eventListener);
 		
 		replayMocks();
 		try {
@@ -47,7 +44,7 @@ public class RecordingEventTaskTest extends TestCase {
 	public void testRunWithRecording() {
 		TestEventListener eventListener = new TestEventListener("runWithRecording");
 		eventListener.setMarkProcessed(true);
-		RecordingEventTask eventTask = new RecordingEventTask(transactionManager, eventDAO, eventSynchronizer, event, eventListener);
+		RecordingEventTask eventTask = new RecordingEventTask(transactionManager, eventDAO, event, eventListener);
 
 		eventDAO.insertProcessedEvent(isA(String.class), eq(eventListener.getConsumerName()));
 		
@@ -60,7 +57,7 @@ public class RecordingEventTaskTest extends TestCase {
 	public void testRunNoRecording() {
 		TestEventListener eventListener = new TestEventListener("runNoRecording");
 		eventListener.setMarkProcessed(false);
-		RecordingEventTask eventTask = new RecordingEventTask(transactionManager, eventDAO, eventSynchronizer, event, eventListener);
+		RecordingEventTask eventTask = new RecordingEventTask(transactionManager, eventDAO, event, eventListener);
 
 		//note: no insertProcessedEvent is called
 		
@@ -71,7 +68,7 @@ public class RecordingEventTaskTest extends TestCase {
 	
 	public void testFailedEvent() {
 		EventListener eventListener = new AsyncTestEventListener(true);
-		RecordingEventTask eventTask = new RecordingEventTask(transactionManager, eventDAO, eventSynchronizer, event, eventListener);
+		RecordingEventTask eventTask = new RecordingEventTask(transactionManager, eventDAO, event, eventListener);
 
 		final IllegalStateException exception = new IllegalStateException();
 		eventDAO.insertFailedEvent("myeventId", "myconsumer", exception);
@@ -83,7 +80,7 @@ public class RecordingEventTaskTest extends TestCase {
 
 	public void testSucceedEvent() {
 		EventListener eventListener = new AsyncTestEventListener(true);
-		RecordingEventTask eventTask = new RecordingEventTask(transactionManager, eventDAO, eventSynchronizer, event, eventListener);
+		RecordingEventTask eventTask = new RecordingEventTask(transactionManager, eventDAO, event, eventListener);
 
 		eventDAO.insertProcessedEvent("myeventId", "myconsumer");
 		

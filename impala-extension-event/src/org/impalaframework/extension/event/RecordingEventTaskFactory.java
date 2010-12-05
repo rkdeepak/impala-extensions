@@ -11,34 +11,38 @@ public class RecordingEventTaskFactory implements EventTaskFactory {
 	
 	private PlatformTransactionManager transactionManager;
 	
-	private EventSynchronizer eventSynchronizer;
-	
 	private EventDAO eventDAO;
 
 	public RecordingEventTaskFactory() {
 		super();
 	}
 
-	public RecordingEventTaskFactory(EventSynchronizer eventSynchronizer, PlatformTransactionManager transactionManager, EventDAO eventDAO) {
+	public RecordingEventTaskFactory(PlatformTransactionManager transactionManager, EventDAO eventDAO) {
 		super();
-		Assert.notNull(eventSynchronizer);
 		Assert.notNull(transactionManager);
 		Assert.notNull(eventDAO);
-		this.eventSynchronizer = eventSynchronizer;
 		this.transactionManager = transactionManager;
 		this.eventDAO = eventDAO;
 	}
 	
 	public EventTask newEventTask(Event Event, EventListener eventListener) {
-		return new RecordingEventTask(transactionManager, eventDAO, eventSynchronizer, Event, eventListener);
+		return new RecordingEventTask(transactionManager, eventDAO, Event, eventListener);
+	}
+	
+	/* *************************** Protected methods for use by subclasses ******************** */
+	
+	protected EventDAO getEventDAO() {
+		return eventDAO;
+	}
+	
+	protected PlatformTransactionManager getTransactionManager() {
+		return transactionManager;
 	}
 
+	/* *************************** Wired in setters ******************** */
+	
 	public void setTransactionManager(PlatformTransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
-	}
-
-	public void setEventSynchronizer(EventSynchronizer eventSynchronizer) {
-		this.eventSynchronizer = eventSynchronizer;
 	}
 
 	public void setEventDAO(EventDAO eventDAO) {
