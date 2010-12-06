@@ -52,4 +52,9 @@ public class EventTask implements Runnable {
 		return eventListener;
 	}
 
+	@Override
+	public String toString() {
+		return "EventTask [event=" + event + ", eventListener=" + eventListener + "]";
+	}
+
 }
