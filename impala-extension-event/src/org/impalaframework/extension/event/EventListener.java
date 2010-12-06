@@ -1,5 +1,7 @@
 package org.impalaframework.extension.event;
 
+import org.springframework.core.Ordered;
+
 
 /**
  * Defines interface for handling synchronous or asynchronous events. Information for these events are contained in Event
@@ -7,7 +9,7 @@ package org.impalaframework.extension.event;
  * 
  * @author Phil Zoio
  */
-public interface EventListener {
+public interface EventListener extends Ordered {
 	
 	/**
 	 * Callback that holds event processing logic
