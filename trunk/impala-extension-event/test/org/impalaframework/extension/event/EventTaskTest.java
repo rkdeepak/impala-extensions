@@ -58,6 +58,10 @@ class AsyncTestEventListener implements AsynchronousEventListener {
 	public void onEvent(Event event) {
 		events.add(event);
 	}
+	
+	public int getOrder() {
+		return 0;
+	}
 
 	public List<Event> getEvents() {
 		return events;

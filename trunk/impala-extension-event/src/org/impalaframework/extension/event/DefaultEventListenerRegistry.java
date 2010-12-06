@@ -1,11 +1,13 @@
 package org.impalaframework.extension.event;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.springframework.core.OrderComparator;
 import org.springframework.util.Assert;
 
 /**
@@ -29,11 +31,19 @@ public class DefaultEventListenerRegistry implements EventListenerRegistry {
 
 		List<EventListener> list = eventListeners.get(eventType);
 		if (list == null) {
-			list = new CopyOnWriteArrayList<EventListener>();
-			eventListeners.put(eventType, list);
+			list = new ArrayList<EventListener>();
+		} else {
+			list = new ArrayList<EventListener>(list);
 		}
 		list.add(listener);
+		sort(list);
+		
+		eventListeners.put(eventType, new CopyOnWriteArrayList<EventListener>(list));
+	}
 
+	@SuppressWarnings("unchecked")
+	private void sort(List<EventListener> list) {
+		Collections.sort(list, new OrderComparator());
 	}
 
 	public boolean removeListener(String eventTypeName, EventListener listener) {

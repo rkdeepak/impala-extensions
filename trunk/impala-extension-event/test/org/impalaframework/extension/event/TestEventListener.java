@@ -36,6 +36,10 @@ public class TestEventListener implements EventListener {
 		return name;
 	}
 	
+	public int getOrder() {
+		return 0;
+	}
+	
 	public void setMarkProcessed(boolean markProcessed) {
 		this.markProcessed = markProcessed;
 	}

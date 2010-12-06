@@ -33,6 +33,10 @@ public class EventIntegrationTest extends BaseIntegrationTest {
 				System.out.println("Handling event: " + event);
 			}
 			
+			public int getOrder() {
+				return 0;
+			}
+			
 		};
 		
 		asyncRegistry.addListener("myeventtype", listener);
