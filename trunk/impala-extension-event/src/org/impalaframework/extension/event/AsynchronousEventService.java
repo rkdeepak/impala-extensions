@@ -188,9 +188,9 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 			logger.debug("Registered asynchronous listeners registered for type " + type + ": " + list);
 		}
 		
+		List<EventTask> eventTaskList = new ArrayList<EventTask>();
+		
 		for (EventListener eventListener : list) {		
-			
-			List<EventTask> eventTaskList = new ArrayList<EventTask>();
 
 			final String consumerName = eventListener.getConsumerName();
 			try {
@@ -211,9 +211,9 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 					logger.error("Original error: " + e.getMessage(), e);		
 				}
 			}
-			
-			taskExecutorService.submit(new EventTaskList(eventTaskList));
 		}
+		
+		taskExecutorService.submit(new EventTaskList(eventTaskList));
 	}
 
 	private void shutdown(ExecutorService executor) {
