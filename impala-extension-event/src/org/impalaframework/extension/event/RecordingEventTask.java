@@ -80,4 +80,9 @@ public class RecordingEventTask extends EventTask {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "RecordingEventTask [" + super.toString() + "]";
+	}
+
 }

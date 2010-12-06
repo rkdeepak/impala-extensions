@@ -1,7 +1,9 @@
 package org.impalaframework.extension.event;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
@@ -12,7 +14,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.Assert;
 
 /**
@@ -26,6 +27,8 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 	private PriorityBlockingQueue<Object> priorityEventQueue = new PriorityBlockingQueue<Object>();
 
 	private ScheduledExecutorService queueExecutorService;
+	
+	private ExecutorService taskExecutorService;
 
 	private EventListenerRegistry eventListenerRegistry;
 	
@@ -77,30 +80,32 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 			delayInMilliseconds = DEFAULT_DELAY;
 		}
 		
-		logger.info("Starting event manager");
-
+		logger.info("Starting event manager, with single threaded queue executor and cached thread pool task executor");
+		
+		taskExecutorService = Executors.newCachedThreadPool();
 		queueExecutorService = Executors.newSingleThreadScheduledExecutor();
-		started.set(true);
-
 		queueExecutorService.scheduleAtFixedRate(new Runnable() {
-			public void run() {
-				consumeQueuedEvent();
-			}
-		},
-		delayInMilliseconds,
-		pollIntervalInMilliseconds,
-		TimeUnit.MILLISECONDS);
-
+				public void run() {
+					consumeQueuedEvent();
+				}
+			},
+			delayInMilliseconds,
+			pollIntervalInMilliseconds,
+			TimeUnit.MILLISECONDS);
+		
+		started.set(true);
 		logger.info("Finished starting event manager");
 	}
 
 	public void stop() {
 
-		logger.info("Stopping event manager");
-
 		started.set(false);
+		logger.info("Stopping event manager");
+		
+		shutdown(taskExecutorService);
+
 		if (!queueExecutorService.isShutdown()) {
-			queueExecutorService.shutdown();
+			shutdown(queueExecutorService);
 		}
 
 		//remove events
@@ -127,11 +132,11 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 	/**
 	 * Consume queued events
 	 */
-	protected void consumeQueuedEvent() {
+	void consumeQueuedEvent() {
 		
 		boolean look = true;
 
-		while (look) {
+		while (look && started.get()) {
 			
 			try {
 	
@@ -183,17 +188,21 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 			logger.debug("Registered asynchronous listeners registered for type " + type + ": " + list);
 		}
 		
-		for (EventListener eventListener : list) {			
+		for (EventListener eventListener : list) {		
+			
+			List<EventTask> eventTaskList = new ArrayList<EventTask>();
+
 			final String consumerName = eventListener.getConsumerName();
 			try {
 
 				EventTask eventTask = newEventTask(event, eventListener);
 				
 				if (logger.isDebugEnabled()){
-					logger.debug("Processing queue for listener '" + consumerName + "' for event: " + event);
+					logger.debug("Creating event task for '" + consumerName + "' for event: " + event);
 				}
 
-				eventTask.run();
+				eventTaskList.add(eventTask);
+				
 			} catch (Exception e) {
 				try {
 					onEventError(event, eventListener, e);
@@ -202,9 +211,21 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 					logger.error("Original error: " + e.getMessage(), e);		
 				}
 			}
+			
+			taskExecutorService.submit(new EventTaskList(eventTaskList));
 		}
 	}
 
+	private void shutdown(ExecutorService executor) {
+		try {
+			executor.shutdown();
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
+	}
+
+	/* ******************** protected overridable methods ****************** */
+	
 	/**
 	 * Logs an event error. Subclasses can override this to handle special processing
 	 */
@@ -216,10 +237,6 @@ public class AsynchronousEventService implements EventService, InitializingBean,
 		Assert.notNull(eventTaskFactory);
 		EventTask eventTask = eventTaskFactory.newEventTask(Event, eventListener);
 		return eventTask;
-	}
-
-	boolean isTransactionActive() {
-		return TransactionSynchronizationManager.isActualTransactionActive();
 	}
 
 	/* ******************** state getter methods ****************** */
