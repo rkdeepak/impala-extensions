@@ -201,32 +201,44 @@ public abstract class BaseAsynchronousEventService implements EventService, Init
 			logger.debug("Registered asynchronous listeners registered for type " + type + ": " + list);
 		}
 		
-		List<EventTask> eventTaskList = new ArrayList<EventTask>();
-		
-		for (EventListener eventListener : list) {		
-
-			final String consumerName = eventListener.getConsumerName();
-			try {
-				
-				if (logger.isDebugEnabled()){
-					logger.debug("Creating event task for '" + consumerName + "' for event: " + event);
-				}
-				
-				EventTask eventTask = newEventTask(event, eventListener);
-
-				eventTaskList.add(eventTask);
-				
-			} catch (Exception e) {
+		if (list.size() > 0) {
+			
+			List<EventTask> eventTaskList = new ArrayList<EventTask>();
+			
+			for (EventListener eventListener : list) {		
+	
+				final String consumerName = eventListener.getConsumerName();
 				try {
-					onEventError(event, eventListener, e);
-				} catch (Exception ee) {
-					logger.error("Event error logging failed: " + ee, ee);
-					logger.error("Original error: " + e.getMessage(), e);		
+					
+					if (logger.isDebugEnabled()){
+						logger.debug("Creating event task for '" + consumerName + "' for event: " + event);
+					}
+					
+					EventTask eventTask = newEventTask(event, eventListener);
+	
+					eventTaskList.add(eventTask);
+					
+				} catch (Exception e) {
+					try {
+						onEventError(event, eventListener, e);
+					} catch (Exception ee) {
+						logger.error("Event error logging failed: " + ee, ee);
+						logger.error("Original error: " + e.getMessage(), e);		
+					}
 				}
 			}
+			
+			if (logger.isDebugEnabled()) {
+				logger.debug("Submitting " + eventTaskList.size() + " tasks for event: " + event);
+			}	
+			
+			submitEventTasks(eventTaskList);
+			
+		} else {
+			if (logger.isDebugEnabled()) {
+				logger.debug("No tasks submitted for event " + event + " as listener list is empty.");
+			}			
 		}
-		
-		submitEventTasks(eventTaskList);
 	}
 
 	protected abstract void submitEventTasks(List<EventTask> eventTaskList);
