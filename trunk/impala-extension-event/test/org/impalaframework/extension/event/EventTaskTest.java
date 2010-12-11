@@ -11,23 +11,16 @@ public class EventTaskTest extends TestCase {
 
 	private Event event;
 
-	private SimpleEventSynchronizer eventSynchronizer;
-
 	public void setUp() {
 		eventType = new EventType("mytype");
 		event = new Event(eventType, "user", "1", "mytype");
-		eventSynchronizer = new SimpleEventSynchronizer();
 	}
 
 	public void testAsynchronous() throws Exception {
 		EventListener eventListener = new AsyncTestEventListener(false);
 		final EventTask eventTask = new EventTask(event, eventListener);
-		eventSynchronizer.awaitTransactionCompletion(eventTask);
-		assertEquals(0, eventSynchronizer.getSubmitted().size());
 		
 		Thread.sleep(200);
-		
-		assertEquals(1, eventSynchronizer.getSubmitted().size());
 	}
 
 }

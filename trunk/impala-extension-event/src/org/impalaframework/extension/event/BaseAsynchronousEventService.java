@@ -55,12 +55,20 @@ public abstract class BaseAsynchronousEventService implements EventService, Init
 		}
 
 		try {
-			priorityEventQueue.offer(event);
+			doSubmitEvent(event);
 		} catch (ClassCastException e) {
 			//got this in here because of peculiar bug on Mac OSX JVM which appears to have
 			//no functional impact other than throwing ClassCastException
 			logger.error("Unexpected class cast exception.", e);
 		}
+	}
+
+	protected void doSubmitEvent(Event event) {
+		addEventToQueue(event);
+	}
+
+	protected final void addEventToQueue(Event event) {
+		priorityEventQueue.offer(event);
 	}
 
 	/* ******************** Life cycle methods ****************** */
