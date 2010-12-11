@@ -18,6 +18,10 @@ public class AsynchronousEventService extends BaseAsynchronousEventService {
 	private ExecutorService taskExecutorService;
 
 	/* ******************** Life cycle methods ****************** */
+
+	protected void doSubmitEvent(Event event) {
+		super.addEventToQueue(event);
+	}
 	
 	public void afterStart() {
 		logger.info("Starting cached thread pool");
