@@ -17,7 +17,7 @@ public class TransactionalAsynchronousEventService extends AsynchronousEventServ
 	
 	@Override
 	protected void doSubmitEvent(Event event) {
-		if (TransactionSynchronizationManager.isSynchronizationActive()) {
+		if (!TransactionSynchronizationManager.isSynchronizationActive()) {
 			addEventToQueue(event);
 		} else {
 			TransactionSynchronizationManager.registerSynchronization(new EventTransactionSynchronization(event));
