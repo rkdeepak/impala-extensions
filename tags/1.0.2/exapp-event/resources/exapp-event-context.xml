@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+       xmlns:service="http://www.impalaframework.org/schema/service"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+http://www.impalaframework.org/schema/service 
+http://impala.googlecode.com/svn/schema/service-registry.xsd">
+
+	<service:export-array beanNames="eventService,syncEventListenerRegistry,asyncEventListenerRegistry"/>
+    
+	<bean id="eventService" class="org.impalaframework.extension.event.DefaultEventService">
+    	<property name="eventDAO" ref="eventDAO"/>
+    	<property name="synchronousEventService" ref="synchronousEventService"/>
+    	<property name="asynchronousEventService" ref="asynchronousEventService"/>
+	</bean>
+	
+	<bean id="syncEventListenerRegistry" class="org.impalaframework.extension.event.DefaultEventListenerRegistry">
+    </bean>
+    
+	<bean id="synchronousEventService" class="org.impalaframework.extension.event.SynchronousEventService">
+    	<property name="eventListenerRegistry" ref="syncEventListenerRegistry"/>
+	</bean>
+    
+    <bean id="eventSynchronizer" class="org.impalaframework.extension.event.TransactionalEventSynchronizer">
+    </bean>
+    
+    <bean id="transactionManager" class="org.impalaframework.extension.event.DummyTransactionManager">
+    </bean>
+    
+    <bean id="eventTaskFactory" class="org.impalaframework.extension.event.RecordingEventTaskFactory">
+    	<property name="eventSynchronizer" ref="eventSynchronizer"/>
+    	<property name="eventDAO" ref="eventDAO"/>
+    	<property name="transactionManager" ref="transactionManager"/>
+    </bean>
+	
+	<bean id="asyncEventListenerRegistry" class="org.impalaframework.extension.event.DefaultEventListenerRegistry">
+    </bean>
+	
+	<bean id="asynchronousEventService" class="org.impalaframework.extension.event.AsynchronousEventService">
+    	<property name="eventTaskFactory" ref="eventTaskFactory"/>
+    	<property name="eventListenerRegistry" ref="asyncEventListenerRegistry"/>
+    	<property name="eventSynchronizer" ref="eventSynchronizer"/>
+	</bean>
+
+</beans>

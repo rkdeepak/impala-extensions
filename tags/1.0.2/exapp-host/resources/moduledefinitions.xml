@@ -1,0 +1,7 @@
+<parent>
+	<names>
+	exapp-root
+	exapp-application
+	exapp-web
+	</names>
+</parent>
