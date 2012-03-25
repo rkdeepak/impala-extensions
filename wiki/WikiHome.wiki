@@ -1,6 +1,8 @@
 #summary WikiHome
 #labels Featured
 
+[http://code.google.com/p/impala-extensions/w/list Wiki page listing]
+
 = Impala Extensions =
 
 The Impala Extensions is a home for extensions to Impala which do not belong in the core project. The extensions project is a collection of potentially unrelated extensions to Impala and Spring.
