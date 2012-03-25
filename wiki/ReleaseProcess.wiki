@@ -24,3 +24,5 @@ ant deployremote
 == Release build ==
 
 Manually create tag
+
+http://impala-extensions.googlecode.com/svn/wiki/images/tag.png
