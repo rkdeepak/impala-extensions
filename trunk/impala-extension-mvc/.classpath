@@ -5,7 +5,7 @@
 	<classpathentry kind="src" path="resources"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/repository/main/commons-logging-1.1.jar" sourcepath="/repository/test/commons-logging-1.1-sources.jar"/>
-	<classpathentry kind="lib" path="/repository/compile/impala-core-1.0.1-SNAPSHOT.jar" sourcepath="/repository/compile/impala-core-1.0.1-SNAPSHOT-sources.jar"/>
+	<classpathentry kind="lib" path="/repository/compile/impala-core-1.0.2.jar" sourcepath="/repository/compile/impala-core-1.0.2-sources.jar"/>
 	<classpathentry kind="lib" path="/repository/main/spring-2.5.6.jar" sourcepath="/repository/main/spring-2.5.6-sources.jar"/>
 	<classpathentry kind="lib" path="/repository/web/spring-webmvc-2.5.6.jar" sourcepath="/repository/web/spring-webmvc-2.5.6-sources.jar"/>
 	<classpathentry kind="lib" path="/repository/test/easymock-2.2.jar" sourcepath="/repository/test/easymock-2.2-sources.jar"/>
