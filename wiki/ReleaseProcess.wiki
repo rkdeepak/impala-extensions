@@ -9,6 +9,8 @@ that project version ends with `SNAPSHOT`, e.g.
 project.version=1.0.2-SNAPSHOT
 }}}
 
+and commit change if necessary.
+
 Do build
 
 {{{
@@ -23,6 +25,15 @@ ant deployremote
 
 == Release build ==
 
-Manually create tag
+Make sure that in _shared.properties_
+that project version *does not end* with `SNAPSHOT`, e.g.
+
+{{{
+project.version=1.0.2-SNAPSHOT
+}}}
+
+Commit the change if necessary.
+
+Manually tag the repository
 
 http://impala-extensions.googlecode.com/svn/wiki/images/tag.png
