@@ -6,5 +6,5 @@ package org.impalaframework.extension.event;
  * @author Phil Zoio
  */
 public interface AsynchronousEventListener extends EventListener {
-	boolean awaitTransactionCompletion();
+    boolean awaitTransactionCompletion();
 }

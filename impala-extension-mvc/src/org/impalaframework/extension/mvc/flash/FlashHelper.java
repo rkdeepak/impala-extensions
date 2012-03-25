@@ -29,78 +29,78 @@ import org.springframework.ui.ModelMap;
  */
 @SuppressWarnings("unchecked")
 public class FlashHelper {
-	
-	private String sessionPrefix;
-	
-	public FlashHelper() {
-		this.sessionPrefix = "";
-	}
+    
+    private String sessionPrefix;
+    
+    public FlashHelper() {
+        this.sessionPrefix = "";
+    }
 
-	public FlashHelper(String sessionPrefix) {
-		super();
-		this.sessionPrefix = sessionPrefix;
-	}
+    public FlashHelper(String sessionPrefix) {
+        super();
+        this.sessionPrefix = sessionPrefix;
+    }
 
-	public void beforeHandleRequest(HttpServletRequest request) {
-		//unpack flash state from session into request
-		unpackFlashState(request);
-	}
+    public void beforeHandleRequest(HttpServletRequest request) {
+        //unpack flash state from session into request
+        unpackFlashState(request);
+    }
 
-	public void afterHandleRequest(HttpServletRequest request, final ModelMap modelMap) {
-		//merge in existing flash state from request
-		mergeFlashState(request, modelMap);
-		
-		//outgoing flash parameters should be added to the session
-		setFlashState(request, modelMap);
-	}
-	
-	void unpackFlashState(HttpServletRequest request) {
-		
-		final HttpSession session = request.getSession(false);
-		if (session != null) {
-			final Map<String,Object> flashState = (Map<String, Object>) session.getAttribute(sessionPrefix+"flashState");
-			if (flashState != null) {
-				request.setAttribute("flashState", flashState);
-				session.removeAttribute(sessionPrefix+"flashState");
-				
-				Set<String> flashKeys = flashState.keySet();
-				for (String flashKey : flashKeys) {
-					Object currentRequestAttribute = request.getAttribute(flashKey);
-					if (currentRequestAttribute == null) {
-						request.setAttribute(flashKey, flashState.get(flashKey));
-					}
-				}
-			}
-		}
-	}
+    public void afterHandleRequest(HttpServletRequest request, final ModelMap modelMap) {
+        //merge in existing flash state from request
+        mergeFlashState(request, modelMap);
+        
+        //outgoing flash parameters should be added to the session
+        setFlashState(request, modelMap);
+    }
+    
+    void unpackFlashState(HttpServletRequest request) {
+        
+        final HttpSession session = request.getSession(false);
+        if (session != null) {
+            final Map<String,Object> flashState = (Map<String, Object>) session.getAttribute(sessionPrefix+"flashState");
+            if (flashState != null) {
+                request.setAttribute("flashState", flashState);
+                session.removeAttribute(sessionPrefix+"flashState");
+                
+                Set<String> flashKeys = flashState.keySet();
+                for (String flashKey : flashKeys) {
+                    Object currentRequestAttribute = request.getAttribute(flashKey);
+                    if (currentRequestAttribute == null) {
+                        request.setAttribute(flashKey, flashState.get(flashKey));
+                    }
+                }
+            }
+        }
+    }
 
-	void mergeFlashState(HttpServletRequest request, ModelMap modelMap) {
-		final Map<String,Object> flashState = (Map<String, Object>) request.getAttribute("flashState");
-		if (flashState != null) {
-			modelMap.mergeAttributes(flashState);
-			request.removeAttribute("flashState");
-		}
-	}
+    void mergeFlashState(HttpServletRequest request, ModelMap modelMap) {
+        final Map<String,Object> flashState = (Map<String, Object>) request.getAttribute("flashState");
+        if (flashState != null) {
+            modelMap.mergeAttributes(flashState);
+            request.removeAttribute("flashState");
+        }
+    }
 
-	void setFlashState(HttpServletRequest request,
-			Map modelMap) {
-		
-		final Set keys = modelMap.keySet();
-		Map<String,Object> flashState = null;
-		
-		for (Object object : keys) {
-			String key = object.toString();
-			if (key.startsWith("flash:")) {
-				String realKey = key.substring("flash:".length());
-				if (flashState == null) flashState = new HashMap<String, Object>();
-				flashState.put(realKey, modelMap.get(key));
-			}
-		}
-		
-		if (flashState != null) {
-			request.getSession().setAttribute(sessionPrefix+"flashState", flashState);
-		}
-	}
+    void setFlashState(HttpServletRequest request,
+            Map modelMap) {
+        
+        final Set keys = modelMap.keySet();
+        Map<String,Object> flashState = null;
+        
+        for (Object object : keys) {
+            String key = object.toString();
+            if (key.startsWith("flash:")) {
+                String realKey = key.substring("flash:".length());
+                if (flashState == null) flashState = new HashMap<String, Object>();
+                flashState.put(realKey, modelMap.get(key));
+            }
+        }
+        
+        if (flashState != null) {
+            request.getSession().setAttribute(sessionPrefix+"flashState", flashState);
+        }
+    }
 
-	
+    
 }

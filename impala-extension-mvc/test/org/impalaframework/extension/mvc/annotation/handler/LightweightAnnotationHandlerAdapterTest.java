@@ -21,56 +21,56 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 public class LightweightAnnotationHandlerAdapterTest extends TestCase {
-	
-	private LightweightAnnotationHandlerAdapter adapter;
+    
+    private LightweightAnnotationHandlerAdapter adapter;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		adapter = new LightweightAnnotationHandlerAdapter();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        adapter = new LightweightAnnotationHandlerAdapter();
+    }
 
-	public void testSupports() {
-		assertTrue(adapter.supports(new TestLightweightController()));
-		assertFalse(adapter.supports(new TestNonLightweightController()));
-	}
-	
-	public void testGetLastModified() throws Exception {
-		assertEquals(-1, adapter.getLastModified(null, null));
-	}
+    public void testSupports() {
+        assertTrue(adapter.supports(new TestLightweightController()));
+        assertFalse(adapter.supports(new TestNonLightweightController()));
+    }
+    
+    public void testGetLastModified() throws Exception {
+        assertEquals(-1, adapter.getLastModified(null, null));
+    }
 
-	public void testGetMethodResolver() throws Exception {
-		final TestLightweightController handler = new TestLightweightController();
-		final AnnotationHandlerMethodResolver methodResolver = adapter.getMethodResolver(handler);
-		assertSame(adapter.getMethodResolver(handler), methodResolver);
-		
-		assertEquals(2, methodResolver.getModelAttributeMethods().size());
-		assertEquals(3, methodResolver.getHandlerMethods().size());
-		assertEquals(1, methodResolver.getHandlerAnnotations().size());
-	}
-	
+    public void testGetMethodResolver() throws Exception {
+        final TestLightweightController handler = new TestLightweightController();
+        final AnnotationHandlerMethodResolver methodResolver = adapter.getMethodResolver(handler);
+        assertSame(adapter.getMethodResolver(handler), methodResolver);
+        
+        assertEquals(2, methodResolver.getModelAttributeMethods().size());
+        assertEquals(3, methodResolver.getHandlerMethods().size());
+        assertEquals(1, methodResolver.getHandlerAnnotations().size());
+    }
+    
 }
 
 @LightweightAdaptable
 class TestLightweightController {
-	
-	@ModelAttribute("att1")
-	public Integer getAtt1() { return 1; }
-	
-	@ModelAttribute("att1")
-	public String getAtt2() { return "att2"; }	
+    
+    @ModelAttribute("att1")
+    public Integer getAtt1() { return 1; }
+    
+    @ModelAttribute("att1")
+    public String getAtt2() { return "att2"; }  
 
-	@RequestMapping("/method1")
-	public void method1(){}
-	
-	@RequestMapping("/method2")
-	public void method2(){}
-	
-	@RequestMapping("/method3")
-	public void method3(){}
-	
-	public void method4(){}
-	
+    @RequestMapping("/method1")
+    public void method1(){}
+    
+    @RequestMapping("/method2")
+    public void method2(){}
+    
+    @RequestMapping("/method3")
+    public void method3(){}
+    
+    public void method4(){}
+    
 }
 
 @Controller

@@ -26,25 +26,25 @@ import org.springframework.web.context.request.NativeWebRequest;
  * @author Phil Zoio
  */
 public class CustomResolverArgumentCollector implements ArgumentCollector {
-	
-	private WebArgumentResolver customResolver;
-	
-	private MethodParameter methodParameter;
-	
-	public CustomResolverArgumentCollector(WebArgumentResolver customResolver, MethodParameter methodParameter) {
-		super();
-		this.customResolver = customResolver;
-		this.methodParameter = methodParameter;
-	}
+    
+    private WebArgumentResolver customResolver;
+    
+    private MethodParameter methodParameter;
+    
+    public CustomResolverArgumentCollector(WebArgumentResolver customResolver, MethodParameter methodParameter) {
+        super();
+        this.customResolver = customResolver;
+        this.methodParameter = methodParameter;
+    }
 
-	public Object getArgument(NativeWebRequest webRequest, ExtendedModelMap implicitModel, TypeConverter typeConverter) {
-		//FIXME test
-		try {
-			return customResolver.resolveArgument(methodParameter, webRequest);
-		}
-		catch (Exception e) {
-			throw new RuntimeException(e.getMessage(), e);
-		}
-	}
+    public Object getArgument(NativeWebRequest webRequest, ExtendedModelMap implicitModel, TypeConverter typeConverter) {
+        //FIXME test
+        try {
+            return customResolver.resolveArgument(methodParameter, webRequest);
+        }
+        catch (Exception e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+    }
 
 }

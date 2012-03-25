@@ -12,17 +12,17 @@ import org.impalaframework.extension.root.MessageService;
 
 public class ProjectMessageIntegrationTest extends BaseIntegrationTest {
 
-	public static void main(String[] args) {
-		InteractiveTestRunner.run(ProjectMessageIntegrationTest.class);
-	}
+    public static void main(String[] args) {
+        InteractiveTestRunner.run(ProjectMessageIntegrationTest.class);
+    }
 
-	public void testIntegration() {
-		MessageService service = Impala.getModuleBean("exapp-application", "messageService", MessageService.class);
-		System.out.println(service.getMessage());
-	}
+    public void testIntegration() {
+        MessageService service = Impala.getModuleBean("exapp-application", "messageService", MessageService.class);
+        System.out.println(service.getMessage());
+    }
 
-	public RootModuleDefinition getModuleDefinition() {
-		return new TestDefinitionSource("exapp-root", "exapp-application").getModuleDefinition();
-	}
+    public RootModuleDefinition getModuleDefinition() {
+        return new TestDefinitionSource("exapp-root", "exapp-application").getModuleDefinition();
+    }
 
 }

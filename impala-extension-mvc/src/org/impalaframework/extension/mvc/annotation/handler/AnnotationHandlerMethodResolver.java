@@ -41,110 +41,110 @@ import org.springframework.web.util.UrlPathHelper;
  * @author Phil Zoio
  */
 public class AnnotationHandlerMethodResolver {
-		
-	/**
-	 * Cache of URI path literals to handler methods
-	 */
-	private Map<String,Method> pathMethodCache = new ConcurrentHashMap<String, Method>();	
+        
+    /**
+     * Cache of URI path literals to handler methods
+     */
+    private Map<String,Method> pathMethodCache = new ConcurrentHashMap<String, Method>();   
 
-	private UrlPathHelper urlPathHelper = new UrlPathHelper();
-	
-	/**
-	 * {@link HandlerMethodResolver} instance. Should be initialised before being wired in to this instance
-	 */
-	private HandlerMethodResolver handlerMethodResolver;
-	
-	/**
-	 * The adapated handler class
-	 */
-	private Class<?> handlerClass;
-	
-	/**
-	 * Class level annotations which are themselves annotated using the {@link Handler} annotation.
-	 * Primary purpose is to determine which flavour of handler adapter implementation to apply for a given
-	 * controller class
-	 */
-	private Collection<Annotation> handlerAnnotations = new ArrayList<Annotation>();
-	
-	/**
-	 * Passes in initialized {@link HandlerMethodResolver} instance
-	 * @param handlerClass
-	 * @param handlerMethodResolver
-	 */
-	public AnnotationHandlerMethodResolver(Class<?> handlerClass, HandlerMethodResolver handlerMethodResolver) {
-		this.handlerMethodResolver = handlerMethodResolver;
-		this.handlerClass = handlerClass;
-	}
-	
-	public void init() {
-		List<Annotation> handlerAnnotations = new ArrayList<Annotation>();
-		final Annotation[] annotations = handlerClass.getAnnotations();
-		for (Annotation annotation : annotations) {
-			
-			if (annotation.annotationType().getAnnotation(Handler.class) != null) {
-				handlerAnnotations.add(annotation);
-			}
-		}
-		this.handlerAnnotations = Collections.unmodifiableList(handlerAnnotations);
-	}
-	
-	public Collection<Annotation> getHandlerAnnotations() {
-		return handlerAnnotations;
-	}
+    private UrlPathHelper urlPathHelper = new UrlPathHelper();
+    
+    /**
+     * {@link HandlerMethodResolver} instance. Should be initialised before being wired in to this instance
+     */
+    private HandlerMethodResolver handlerMethodResolver;
+    
+    /**
+     * The adapated handler class
+     */
+    private Class<?> handlerClass;
+    
+    /**
+     * Class level annotations which are themselves annotated using the {@link Handler} annotation.
+     * Primary purpose is to determine which flavour of handler adapter implementation to apply for a given
+     * controller class
+     */
+    private Collection<Annotation> handlerAnnotations = new ArrayList<Annotation>();
+    
+    /**
+     * Passes in initialized {@link HandlerMethodResolver} instance
+     * @param handlerClass
+     * @param handlerMethodResolver
+     */
+    public AnnotationHandlerMethodResolver(Class<?> handlerClass, HandlerMethodResolver handlerMethodResolver) {
+        this.handlerMethodResolver = handlerMethodResolver;
+        this.handlerClass = handlerClass;
+    }
+    
+    public void init() {
+        List<Annotation> handlerAnnotations = new ArrayList<Annotation>();
+        final Annotation[] annotations = handlerClass.getAnnotations();
+        for (Annotation annotation : annotations) {
+            
+            if (annotation.annotationType().getAnnotation(Handler.class) != null) {
+                handlerAnnotations.add(annotation);
+            }
+        }
+        this.handlerAnnotations = Collections.unmodifiableList(handlerAnnotations);
+    }
+    
+    public Collection<Annotation> getHandlerAnnotations() {
+        return handlerAnnotations;
+    }
 
-	public Method resolveHandlerMethod(HttpServletRequest request) throws ServletException {
-		
-		String lookupPath = urlPathHelper.getLookupPathForRequest(request);
-		String methodLookupPath = lookupPath+"." + request.getMethod();
-		
-		Method methodToReturn = pathMethodCache.get(methodLookupPath);
-		
-		if (methodToReturn == null) {
-			methodToReturn = getHandlerMethod(lookupPath, methodLookupPath, request);
-		}
-		
-		return methodToReturn;
-	}
+    public Method resolveHandlerMethod(HttpServletRequest request) throws ServletException {
+        
+        String lookupPath = urlPathHelper.getLookupPathForRequest(request);
+        String methodLookupPath = lookupPath+"." + request.getMethod();
+        
+        Method methodToReturn = pathMethodCache.get(methodLookupPath);
+        
+        if (methodToReturn == null) {
+            methodToReturn = getHandlerMethod(lookupPath, methodLookupPath, request);
+        }
+        
+        return methodToReturn;
+    }
 
-	private Method getHandlerMethod(String lookupPath, String methodLookupPath, HttpServletRequest request) {
+    private Method getHandlerMethod(String lookupPath, String methodLookupPath, HttpServletRequest request) {
 
-		
-		for (Method handlerMethod : getHandlerMethods()) {
-			RequestMapping mapping = AnnotationUtils.findAnnotation(handlerMethod, RequestMapping.class);
-			String[] values = mapping.value();
-			
-			if (values[0].equals(lookupPath)) {
-				
-				RequestMethod[] method = mapping.method();
-				if (method != null && method.length > 0) {
-					for (RequestMethod requestMethod : method) {
-						if (request.getMethod().equals(requestMethod.toString())) {
-							pathMethodCache.put(methodLookupPath, handlerMethod);
-							return handlerMethod;
-						}
-					}
-				} else {
-					pathMethodCache.put(methodLookupPath, handlerMethod);
-					return handlerMethod;
-				}
-			}				
-		}
-		
-		return null;
-	}
+        
+        for (Method handlerMethod : getHandlerMethods()) {
+            RequestMapping mapping = AnnotationUtils.findAnnotation(handlerMethod, RequestMapping.class);
+            String[] values = mapping.value();
+            
+            if (values[0].equals(lookupPath)) {
+                
+                RequestMethod[] method = mapping.method();
+                if (method != null && method.length > 0) {
+                    for (RequestMethod requestMethod : method) {
+                        if (request.getMethod().equals(requestMethod.toString())) {
+                            pathMethodCache.put(methodLookupPath, handlerMethod);
+                            return handlerMethod;
+                        }
+                    }
+                } else {
+                    pathMethodCache.put(methodLookupPath, handlerMethod);
+                    return handlerMethod;
+                }
+            }               
+        }
+        
+        return null;
+    }
 
-	public Set<Method> getHandlerMethods() {
-		return handlerMethodResolver.getHandlerMethods();
-	}
+    public Set<Method> getHandlerMethods() {
+        return handlerMethodResolver.getHandlerMethods();
+    }
 
-	public Set<Method> getModelAttributeMethods() {
-		return handlerMethodResolver.getModelAttributeMethods();
-	}
-	
-	public final boolean hasHandlerMethods() {
-		return handlerMethodResolver.hasHandlerMethods();
-	}
-	
-	
-	
+    public Set<Method> getModelAttributeMethods() {
+        return handlerMethodResolver.getModelAttributeMethods();
+    }
+    
+    public final boolean hasHandlerMethods() {
+        return handlerMethodResolver.hasHandlerMethods();
+    }
+    
+    
+    
 }

@@ -27,72 +27,72 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;
 
 public class FlashStateEnabledAnnotationHandlerAdapter extends AnnotationMethodHandlerAdapter {
-	
-	public static Log logger = LogFactory.getLog(FlashStateEnabledAnnotationHandlerAdapter.class);
-	
-	private FlashHelper flashHelper = new FlashHelper();
-	
-	public ModelAndView handle(HttpServletRequest request,
-			HttpServletResponse response, Object handler) throws Exception {
+    
+    public static Log logger = LogFactory.getLog(FlashStateEnabledAnnotationHandlerAdapter.class);
+    
+    private FlashHelper flashHelper = new FlashHelper();
+    
+    public ModelAndView handle(HttpServletRequest request,
+            HttpServletResponse response, Object handler) throws Exception {
 
-		RequestModelHelper.maybeDebugRequest(logger, request);
-		
-		StopWatch watch = null;
-		
-		final boolean debugEnabled;
-		
-		if (logger.isDebugEnabled()) {
-			debugEnabled = true;
-		} else {
-			debugEnabled = false;
-		}
-		try {
-		
-			if (debugEnabled) {
-				watch = new StopWatch();
-				watch.start();
-				logger.debug(MemoryUtils.getMemoryInfo().toString());
-			}
-			
-			beforeHandle(request);
-			
-			ModelAndView modelAndView = super.handle(request, response, handler);
-	
-			if (modelAndView != null) {
-			
-				afterHandle(request, modelAndView);
-				
-				return modelAndView;
-			
-			}
-		}
-		finally {
-		
-			if (debugEnabled) {
-				watch.stop();
-				logger.debug("Request executed in " + watch.getTotalTimeMillis() + " milliseconds");
-			}
-		}
-		
-		return null;
-	}
+        RequestModelHelper.maybeDebugRequest(logger, request);
+        
+        StopWatch watch = null;
+        
+        final boolean debugEnabled;
+        
+        if (logger.isDebugEnabled()) {
+            debugEnabled = true;
+        } else {
+            debugEnabled = false;
+        }
+        try {
+        
+            if (debugEnabled) {
+                watch = new StopWatch();
+                watch.start();
+                logger.debug(MemoryUtils.getMemoryInfo().toString());
+            }
+            
+            beforeHandle(request);
+            
+            ModelAndView modelAndView = super.handle(request, response, handler);
+    
+            if (modelAndView != null) {
+            
+                afterHandle(request, modelAndView);
+                
+                return modelAndView;
+            
+            }
+        }
+        finally {
+        
+            if (debugEnabled) {
+                watch.stop();
+                logger.debug("Request executed in " + watch.getTotalTimeMillis() + " milliseconds");
+            }
+        }
+        
+        return null;
+    }
 
-	protected void beforeHandle(HttpServletRequest request) {
-		flashHelper.beforeHandleRequest(request);
-	}
+    protected void beforeHandle(HttpServletRequest request) {
+        flashHelper.beforeHandleRequest(request);
+    }
 
-	protected void afterHandle(
-			HttpServletRequest request,
-			ModelAndView modelAndView) {
-		
-		final ModelMap modelMap = modelAndView.getModelMap();
+    protected void afterHandle(
+            HttpServletRequest request,
+            ModelAndView modelAndView) {
+        
+        final ModelMap modelMap = modelAndView.getModelMap();
 
-		flashHelper.afterHandleRequest(request, modelMap);
+        flashHelper.afterHandleRequest(request, modelMap);
 
-		boolean isRedirect = RequestModelHelper.isRedirect(modelAndView);
+        boolean isRedirect = RequestModelHelper.isRedirect(modelAndView);
 
-		if (!isRedirect)
-			RequestModelHelper.setParameters(request, modelMap);
-	}
-	
+        if (!isRedirect)
+            RequestModelHelper.setParameters(request, modelMap);
+    }
+    
 }

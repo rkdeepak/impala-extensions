@@ -28,18 +28,18 @@ import org.springframework.web.context.request.WebRequest;
  */
 public class RequestAttributeArgumentResolver extends BaseAttributeArgumentResolver {
 
-	protected String getAttribute(Object paramAnn) {
-		String attributeName = null;
-		if (RequestAttribute.class.isInstance(paramAnn)) {
-			RequestAttribute attribute = (RequestAttribute) paramAnn;
-			attributeName = attribute.value();
-		}
-		return attributeName;
-	}
+    protected String getAttribute(Object paramAnn) {
+        String attributeName = null;
+        if (RequestAttribute.class.isInstance(paramAnn)) {
+            RequestAttribute attribute = (RequestAttribute) paramAnn;
+            attributeName = attribute.value();
+        }
+        return attributeName;
+    }
 
-	protected Object getValue(NativeWebRequest webRequest, String attributeName) {
-		Object attribute = webRequest.getAttribute(attributeName, WebRequest.SCOPE_REQUEST);
-		return attribute;
-	}
+    protected Object getValue(NativeWebRequest webRequest, String attributeName) {
+        Object attribute = webRequest.getAttribute(attributeName, WebRequest.SCOPE_REQUEST);
+        return attribute;
+    }
 
 }

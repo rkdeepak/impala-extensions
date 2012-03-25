@@ -25,9 +25,9 @@ import java.lang.annotation.Target;
 @Documented
 public @interface SessionAttribute {
 
-	/**
-	 * The session attribute to bind to.
-	 */
-	String value();
+    /**
+     * The session attribute to bind to.
+     */
+    String value();
 
 }

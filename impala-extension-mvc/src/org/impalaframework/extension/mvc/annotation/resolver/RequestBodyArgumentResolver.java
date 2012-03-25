@@ -34,29 +34,29 @@ import org.springframework.web.context.request.NativeWebRequest;
  */
 public class RequestBodyArgumentResolver extends BaseAttributeArgumentResolver {
 
-	protected String getAttribute(Object paramAnn) {
-		if (RequestBody.class.isInstance(paramAnn)) {
-			RequestBody attribute = (RequestBody) paramAnn;
-			return attribute.value();
-		}
-		return null;
-	}
+    protected String getAttribute(Object paramAnn) {
+        if (RequestBody.class.isInstance(paramAnn)) {
+            RequestBody attribute = (RequestBody) paramAnn;
+            return attribute.value();
+        }
+        return null;
+    }
 
-	protected Object getValue(NativeWebRequest webRequest, String encoding) {
-		Object nativeRequest = webRequest.getNativeRequest();
-		if (nativeRequest instanceof HttpServletRequest) {
-			HttpServletRequest req = (HttpServletRequest) nativeRequest;
-			try {
-				ServletInputStream inputStream = req.getInputStream();
-				String body = FileCopyUtils.copyToString(new InputStreamReader(inputStream, encoding));
-				return body;
-			} catch (IOException e) {
-				//FIXME log
-				e.printStackTrace();
-				return null;
-			}
-		}
-		return null;
-	}
+    protected Object getValue(NativeWebRequest webRequest, String encoding) {
+        Object nativeRequest = webRequest.getNativeRequest();
+        if (nativeRequest instanceof HttpServletRequest) {
+            HttpServletRequest req = (HttpServletRequest) nativeRequest;
+            try {
+                ServletInputStream inputStream = req.getInputStream();
+                String body = FileCopyUtils.copyToString(new InputStreamReader(inputStream, encoding));
+                return body;
+            } catch (IOException e) {
+                //FIXME log
+                e.printStackTrace();
+                return null;
+            }
+        }
+        return null;
+    }
 
 }

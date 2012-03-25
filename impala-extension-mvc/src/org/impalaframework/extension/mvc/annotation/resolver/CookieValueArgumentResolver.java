@@ -29,28 +29,28 @@ import org.springframework.web.context.request.NativeWebRequest;
  */
 public class CookieValueArgumentResolver extends BaseAttributeArgumentResolver {
 
-	protected String getAttribute(Object paramAnn) {
-		String attributeName = null;
-		if (CookieValue.class.isInstance(paramAnn)) {
-			CookieValue attribute = (CookieValue) paramAnn;
-			attributeName = attribute.value();
-		}
-		return attributeName;
-	}
+    protected String getAttribute(Object paramAnn) {
+        String attributeName = null;
+        if (CookieValue.class.isInstance(paramAnn)) {
+            CookieValue attribute = (CookieValue) paramAnn;
+            attributeName = attribute.value();
+        }
+        return attributeName;
+    }
 
-	protected Object getValue(NativeWebRequest webRequest, String attributeName) {
-		HttpServletRequest request = ObjectUtils.cast(webRequest.getNativeRequest(), HttpServletRequest.class);
-		final Cookie[] cookies = request.getCookies();
-		if (cookies == null) {
-			return null;
-		}
-		for (Cookie cookie : cookies) {
-			final String name = cookie.getName();
-			if (name.equals(attributeName)) {
-				return cookie.getValue();
-			}
-		}
-		return null;
-	}
+    protected Object getValue(NativeWebRequest webRequest, String attributeName) {
+        HttpServletRequest request = ObjectUtils.cast(webRequest.getNativeRequest(), HttpServletRequest.class);
+        final Cookie[] cookies = request.getCookies();
+        if (cookies == null) {
+            return null;
+        }
+        for (Cookie cookie : cookies) {
+            final String name = cookie.getName();
+            if (name.equals(attributeName)) {
+                return cookie.getValue();
+            }
+        }
+        return null;
+    }
 
 }

@@ -13,14 +13,14 @@ import org.impalaframework.extension.event.RecordingEventTaskTest;
 
 public class AutomatedEventTests extends TestCase {
 
-	public static Test suite() {
-		TestSuite suite = new TestSuite();
-		suite.addTestSuite(DefaultEventListenerRegistryTest.class);
-		suite.addTestSuite(EventListenerContributorTest.class);
-		suite.addTestSuite(DefaultEventServiceTest.class);
-		suite.addTestSuite(EventServiceTest.class);
-		suite.addTestSuite(EventTaskTest.class);
-		suite.addTestSuite(RecordingEventTaskTest.class);
-		return suite;
-	}
+    public static Test suite() {
+        TestSuite suite = new TestSuite();
+        suite.addTestSuite(DefaultEventListenerRegistryTest.class);
+        suite.addTestSuite(EventListenerContributorTest.class);
+        suite.addTestSuite(DefaultEventServiceTest.class);
+        suite.addTestSuite(EventServiceTest.class);
+        suite.addTestSuite(EventTaskTest.class);
+        suite.addTestSuite(RecordingEventTaskTest.class);
+        return suite;
+    }
 }

@@ -32,40 +32,40 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.web.context.request.NativeWebRequest;
 
 public class BaseArgumentCollectorTest extends TestCase {
-	
-	protected NativeWebRequest request;
+    
+    protected NativeWebRequest request;
 
-	protected BeanWrapper typeConverter = new BeanWrapperImpl();
+    protected BeanWrapper typeConverter = new BeanWrapperImpl();
 
-	protected ExtendedModelMap implicitModel;
+    protected ExtendedModelMap implicitModel;
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		request = createMock(NativeWebRequest.class);
-		implicitModel = new ExtendedModelMap();
-	}
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        request = createMock(NativeWebRequest.class);
+        implicitModel = new ExtendedModelMap();
+    }
 
-	protected Annotation getParamAnnotation(Class<?> clazz, String name, Class<?> paramType) {
-		MethodParameter parameter = getMethodParameter(clazz, name, paramType);
-		Annotation annotation = WebAnnotationUtils.getAnnotations(parameter, "getParameterAnnotations")[0];
-			//parameter.getParameterAnnotations()[0];
-		return annotation;
-	}
+    protected Annotation getParamAnnotation(Class<?> clazz, String name, Class<?> paramType) {
+        MethodParameter parameter = getMethodParameter(clazz, name, paramType);
+        Annotation annotation = WebAnnotationUtils.getAnnotations(parameter, "getParameterAnnotations")[0];
+            //parameter.getParameterAnnotations()[0];
+        return annotation;
+    }
 
-	protected MethodParameter getMethodParameter(Class<?> clazz, String name, Class<?> paramType) {
-		Class<?>[] paramTypes = new Class[]{paramType};
-		Method method = ReflectionUtils.findMethod(clazz, name, paramTypes);
-		return new MethodParameter(method, 0);
-	}
+    protected MethodParameter getMethodParameter(Class<?> clazz, String name, Class<?> paramType) {
+        Class<?>[] paramTypes = new Class[]{paramType};
+        Method method = ReflectionUtils.findMethod(clazz, name, paramTypes);
+        return new MethodParameter(method, 0);
+    }
 
-	public void replayMocks() {
-		replay(request);
-	}
+    public void replayMocks() {
+        replay(request);
+    }
 
-	public void verifyMocks() {
-		verify(request);
-	}
+    public void verifyMocks() {
+        verify(request);
+    }
 
 
 }

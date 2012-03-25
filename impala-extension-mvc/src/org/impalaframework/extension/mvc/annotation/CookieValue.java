@@ -25,9 +25,9 @@ import java.lang.annotation.Target;
 @Documented
 public @interface CookieValue {
 
-	/**
-	 * The request parameter to bind to.
-	 */
-	String value();
+    /**
+     * The request parameter to bind to.
+     */
+    String value();
 
 }

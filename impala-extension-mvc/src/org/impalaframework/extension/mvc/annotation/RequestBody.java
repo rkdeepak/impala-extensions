@@ -24,9 +24,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface RequestBody {
-	
-	/**
-	 * The encoding to use
-	 */
-	String value() default "UTF8";
+    
+    /**
+     * The encoding to use
+     */
+    String value() default "UTF8";
 }
