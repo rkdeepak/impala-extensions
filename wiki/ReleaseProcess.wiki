@@ -55,5 +55,5 @@ ant clean dist test publishsignlocal
 To deploy to Maven snapshots repository: http://oss.sonatype.org/index.html
 
 {{{
-ant mvnsigndeploy
+ant -Dmaven.release=true mvnsigndeploy
 }}}
