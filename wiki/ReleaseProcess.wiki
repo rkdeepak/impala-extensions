@@ -20,7 +20,7 @@ ant clean dist test publishlocal
 To deploy to Maven snapshots repository: http://oss.sonatype.org/index.html
 
 {{{
-ant deployremote
+ant mvndeploy
 }}}
 
 == Release build ==
@@ -55,5 +55,5 @@ ant clean dist test publishsignlocal
 To deploy to Maven snapshots repository: http://oss.sonatype.org/index.html
 
 {{{
-ant deployremote
+ant mvnsigndeploy
 }}}
