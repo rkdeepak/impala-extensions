@@ -57,3 +57,5 @@ To deploy to Maven snapshots repository: http://oss.sonatype.org/index.html
 {{{
 ant -Dmaven.release=true mvnsigndeploy
 }}}
+
+See [https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-11.WhatDoPeopleThinkAboutOSSRH documentation on how to promote release].
