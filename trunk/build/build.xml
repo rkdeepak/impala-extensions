@@ -36,4 +36,17 @@
 	<target name = "mvndeploy" depends = "shared:mvn-deploy" description="Deploys to remote Maven repository"/>
 	<target name = "mvnsigndeploy" depends = "shared:mvn-sign-deploy" description="Deploys signed content to remote Maven repository"/>
 	
+	<!-- override shared mvn-deploy -->
+    <target name = "shared:mvn-deploy" depends = "shared:mvn-not-signed,mvn:username,mvn:password">
+        <antforeach antfile="build.xml" dir = "${workspace.root}" projects = "${maven.artifacts}" target = "mvn:deploy" inheritall = "false">
+            <property name="mvn.username" value="${mvn.username}"/>
+            <property name="mvn.password" value="${mvn.password}"/>
+            <property name="maven.organisation" value="${maven.organisation}"/>
+            <property name="maven.repo.root" value="${maven.repo.root}"/>
+            <property name="maven.snapshot.repository" value="${maven.snapshot.repository}"/>
+            <property name="maven.release.repository" value="${maven.release.repository}"/>
+            <property name="mvn.signed" value="${mvn.signed}"/>
+        </antforeach>
+    </target>
+	
 </project>
