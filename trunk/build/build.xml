@@ -31,6 +31,7 @@
 	<target name = "tomcat" depends = "shared-tomcat:copy" description="Deploy war to Tomcat"/>
 	<target name = "publishlocal" depends = "mvn:publish-local" description="Publishes to local Maven repository"/>
 	<target name = "publishsignlocal" depends = "mvn:publish-sign-local" description="Publishes to local Maven repository, also signing artifacts"/>
-	<target name = "deployremote" depends = "shared:mvn-deploy" description="Deploys to remote Maven repository"/>
+	<target name = "mvndeploy" depends = "shared:mvn-deploy" description="Deploys to remote Maven repository"/>
+	<target name = "mvnsigndeploy" depends = "shared:mvn-sign-deploy" description="Deploys signed content to remote Maven repository"/>
 	
 </project>
