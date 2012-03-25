@@ -6,11 +6,11 @@ package org.impalaframework.extension.event;
  * @author Phil Zoio
  */
 public interface EventDAO {
-	
-	public void insertEvent(Event event);
+    
+    public void insertEvent(Event event);
 
-	public void insertProcessedEvent(String eventId, String consumer);
+    public void insertProcessedEvent(String eventId, String consumer);
 
-	public void insertFailedEvent(String eventId, String consumer, Throwable error);
+    public void insertFailedEvent(String eventId, String consumer, Throwable error);
 
 }

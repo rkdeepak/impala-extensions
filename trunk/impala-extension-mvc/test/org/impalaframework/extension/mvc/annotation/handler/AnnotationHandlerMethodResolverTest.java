@@ -18,11 +18,11 @@ import junit.framework.TestCase;
 
 public class AnnotationHandlerMethodResolverTest extends TestCase {
 
-	public void testInit() throws Exception {
-		final AnnotationHandlerMethodResolver resolver = new AnnotationHandlerMethodResolver(LightweightController.class, null);
-		resolver.init();
-		
-		assertEquals(1, resolver.getHandlerAnnotations().size());
-	}
-	
+    public void testInit() throws Exception {
+        final AnnotationHandlerMethodResolver resolver = new AnnotationHandlerMethodResolver(LightweightController.class, null);
+        resolver.init();
+        
+        assertEquals(1, resolver.getHandlerAnnotations().size());
+    }
+    
 }

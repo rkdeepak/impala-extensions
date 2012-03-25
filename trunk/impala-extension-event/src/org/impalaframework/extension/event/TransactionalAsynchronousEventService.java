@@ -10,43 +10,43 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
  * @author Phil Zoio
  */
 public class TransactionalAsynchronousEventService extends AsynchronousEventService {
-	
-	private static final Log logger = LogFactory.getLog(TransactionalAsynchronousEventService.class);
-	
-	//FIXME write unit tests for this.
-	
-	@Override
-	protected void doSubmitEvent(Event event) {
-		if (!TransactionSynchronizationManager.isSynchronizationActive()) {
-			addEventToQueue(event);
-		} else {
-			TransactionSynchronizationManager.registerSynchronization(new EventTransactionSynchronization(event));
-		}
-	}
-	
-	class EventTransactionSynchronization extends TransactionSynchronizationAdapter {
-		
-		private Event event;
+    
+    private static final Log logger = LogFactory.getLog(TransactionalAsynchronousEventService.class);
+    
+    //FIXME write unit tests for this.
+    
+    @Override
+    protected void doSubmitEvent(Event event) {
+        if (!TransactionSynchronizationManager.isSynchronizationActive()) {
+            addEventToQueue(event);
+        } else {
+            TransactionSynchronizationManager.registerSynchronization(new EventTransactionSynchronization(event));
+        }
+    }
+    
+    class EventTransactionSynchronization extends TransactionSynchronizationAdapter {
+        
+        private Event event;
 
-		public EventTransactionSynchronization(Event event) {
-			super();
-			this.event = event;
-		}
+        public EventTransactionSynchronization(Event event) {
+            super();
+            this.event = event;
+        }
 
-		@Override
-		public void afterCommit() {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Transaction committed: adding event to queue: " + event);
-			}
-			TransactionalAsynchronousEventService.this.addEventToQueue(event);
-		}
-		
-		@Override
-		public void afterCompletion(int status) {			
-			if (logger.isDebugEnabled()) {
-				logger.debug("Transaction event synchronization completed with status: " + status);
-			}
-		}
-	}
+        @Override
+        public void afterCommit() {
+            if (logger.isDebugEnabled()) {
+                logger.debug("Transaction committed: adding event to queue: " + event);
+            }
+            TransactionalAsynchronousEventService.this.addEventToQueue(event);
+        }
+        
+        @Override
+        public void afterCompletion(int status) {           
+            if (logger.isDebugEnabled()) {
+                logger.debug("Transaction event synchronization completed with status: " + status);
+            }
+        }
+    }
 
 }

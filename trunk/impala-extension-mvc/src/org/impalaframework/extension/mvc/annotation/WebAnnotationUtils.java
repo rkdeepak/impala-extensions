@@ -21,16 +21,16 @@ import org.springframework.util.ReflectionUtils;
 
 public class WebAnnotationUtils {
 
-	public static final String ARGUMENT_PENDING = ".ARGUMENT_PENDING";
-	
-	public static Annotation[] getAnnotations(MethodParameter methodParameter, String methodName) {
-		try {
-			return (Annotation[]) 
-				ReflectionUtils.invokeMethod(methodParameter.getClass().getMethod(methodName, new Class[0]), methodParameter);
-		}
-		catch (NoSuchMethodException e) {
-			throw new IllegalArgumentException("No method found: " + methodName, e);
-		}
-	}
+    public static final String ARGUMENT_PENDING = ".ARGUMENT_PENDING";
+    
+    public static Annotation[] getAnnotations(MethodParameter methodParameter, String methodName) {
+        try {
+            return (Annotation[]) 
+                ReflectionUtils.invokeMethod(methodParameter.getClass().getMethod(methodName, new Class[0]), methodParameter);
+        }
+        catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException("No method found: " + methodName, e);
+        }
+    }
 
 }

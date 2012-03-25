@@ -25,9 +25,9 @@ import java.lang.annotation.Target;
 @Documented
 public @interface RequestHeader {
 
-	/**
-	 * The name of header to bind to
-	 */
-	String value();
+    /**
+     * The name of header to bind to
+     */
+    String value();
 
 }

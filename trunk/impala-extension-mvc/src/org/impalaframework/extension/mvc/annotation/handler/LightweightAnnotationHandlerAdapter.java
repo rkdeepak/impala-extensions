@@ -47,106 +47,106 @@ import org.springframework.web.servlet.ModelAndView;
  */
 public class LightweightAnnotationHandlerAdapter implements HandlerAdapter, InitializingBean {
 
-	private static final Log logger = LogFactory.getLog(LightweightAnnotationHandlerAdapter.class);
-	
-	private WebArgumentResolver[] customArgumentResolvers;
-	
-	private final Map<Class<?>, AnnotationHandlerMethodResolver> methodResolverCache =
-			new ConcurrentHashMap<Class<?>, AnnotationHandlerMethodResolver>();
-	
-	private ServletHandlerMethodInvoker methodInvoker;
-	
-	public void afterPropertiesSet() throws Exception {
-		methodInvoker = new ServletHandlerMethodInvoker(customArgumentResolvers);
-	}
-	
-	public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
-		throws Exception {
-		return invokeHandlerMethod(request, response, handler);
-	}
-	
-	public long getLastModified(HttpServletRequest request, Object handler) {
-		return -1;
-	}
-	
-	public boolean supports(Object handler) {
-		return hasHandlerAnnotation(handler, LightweightAdaptable.class);
-	}
-	
-	/* ****************** Implementation methods ************** */
-	
-	protected boolean hasHandlerAnnotation(
-			Object handler,
-			final Class<? extends Annotation> annotationClass) {
-		final AnnotationHandlerMethodResolver methodResolver = getMethodResolver(handler);
-		final Collection<Annotation> handlerAnnotations = methodResolver.getHandlerAnnotations();
-		for (Annotation annotation : handlerAnnotations) {
-			if (annotationClass.isInstance(annotation)) return true;
-		}
-		return false;
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected ModelAndView invokeHandlerMethod(
-			HttpServletRequest request,
-			HttpServletResponse response, 
-			Object handler) throws Exception {
-		
-		AnnotationHandlerMethodResolver methodResolver = getMethodResolver(handler);
-		Method handlerMethod = methodResolver.resolveHandlerMethod(request);
-		
-		if (logger.isDebugEnabled()) {
-			logger.debug("Method for " + request.getRequestURI() + ": " + handlerMethod);
-		}
-		
-		ServletWebRequest webRequest = new ServletWebRequest(request, response);
-		ExtendedModelMap implicitModel = new BindingAwareModelMap();
-		
-		TypeConverter typeConverter = methodInvoker.getTypeConverter();
+    private static final Log logger = LogFactory.getLog(LightweightAnnotationHandlerAdapter.class);
+    
+    private WebArgumentResolver[] customArgumentResolvers;
+    
+    private final Map<Class<?>, AnnotationHandlerMethodResolver> methodResolverCache =
+            new ConcurrentHashMap<Class<?>, AnnotationHandlerMethodResolver>();
+    
+    private ServletHandlerMethodInvoker methodInvoker;
+    
+    public void afterPropertiesSet() throws Exception {
+        methodInvoker = new ServletHandlerMethodInvoker(customArgumentResolvers);
+    }
+    
+    public ModelAndView handle(HttpServletRequest request, HttpServletResponse response, Object handler)
+        throws Exception {
+        return invokeHandlerMethod(request, response, handler);
+    }
+    
+    public long getLastModified(HttpServletRequest request, Object handler) {
+        return -1;
+    }
+    
+    public boolean supports(Object handler) {
+        return hasHandlerAnnotation(handler, LightweightAdaptable.class);
+    }
+    
+    /* ****************** Implementation methods ************** */
+    
+    protected boolean hasHandlerAnnotation(
+            Object handler,
+            final Class<? extends Annotation> annotationClass) {
+        final AnnotationHandlerMethodResolver methodResolver = getMethodResolver(handler);
+        final Collection<Annotation> handlerAnnotations = methodResolver.getHandlerAnnotations();
+        for (Annotation annotation : handlerAnnotations) {
+            if (annotationClass.isInstance(annotation)) return true;
+        }
+        return false;
+    }
+    
+    @SuppressWarnings("unchecked")
+    protected ModelAndView invokeHandlerMethod(
+            HttpServletRequest request,
+            HttpServletResponse response, 
+            Object handler) throws Exception {
+        
+        AnnotationHandlerMethodResolver methodResolver = getMethodResolver(handler);
+        Method handlerMethod = methodResolver.resolveHandlerMethod(request);
+        
+        if (logger.isDebugEnabled()) {
+            logger.debug("Method for " + request.getRequestURI() + ": " + handlerMethod);
+        }
+        
+        ServletWebRequest webRequest = new ServletWebRequest(request, response);
+        ExtendedModelMap implicitModel = new BindingAwareModelMap();
+        
+        TypeConverter typeConverter = methodInvoker.getTypeConverter();
 
-		Set<Method> modelAttributeMethods = methodResolver.getModelAttributeMethods();
-		for (Method method : modelAttributeMethods) {
-			methodInvoker.invokeModelAttributeMethod(method, handler, webRequest, implicitModel, typeConverter);
-		}
-		
-		Object result = methodInvoker.invokeHandlerMethod(handlerMethod, handler, webRequest, implicitModel, typeConverter);
-		ModelAndView mav = methodInvoker.getModelAndView(handlerMethod, handler.getClass(), result, implicitModel, webRequest);
-		methodInvoker.updateModelAttributes(handler, (mav != null ? mav.getModel() : null), implicitModel, webRequest);
-		
-		return mav;
-	}
-	
-	protected AnnotationHandlerMethodResolver getMethodResolver(Object handler) {
-		Class<?> handlerClass = ClassUtils.getUserClass(handler);
-		AnnotationHandlerMethodResolver resolver = this.methodResolverCache.get(handlerClass);
-		if (resolver == null) {
-			
-			HandlerMethodResolver handlerMethodResolver = newHandlerMethodResolver(handlerClass);	
-			
-			resolver = new AnnotationHandlerMethodResolver(handlerClass, handlerMethodResolver);
-			resolver.init();
-			this.methodResolverCache.put(handlerClass, resolver);
-		}
-		return resolver;
-	}
+        Set<Method> modelAttributeMethods = methodResolver.getModelAttributeMethods();
+        for (Method method : modelAttributeMethods) {
+            methodInvoker.invokeModelAttributeMethod(method, handler, webRequest, implicitModel, typeConverter);
+        }
+        
+        Object result = methodInvoker.invokeHandlerMethod(handlerMethod, handler, webRequest, implicitModel, typeConverter);
+        ModelAndView mav = methodInvoker.getModelAndView(handlerMethod, handler.getClass(), result, implicitModel, webRequest);
+        methodInvoker.updateModelAttributes(handler, (mav != null ? mav.getModel() : null), implicitModel, webRequest);
+        
+        return mav;
+    }
+    
+    protected AnnotationHandlerMethodResolver getMethodResolver(Object handler) {
+        Class<?> handlerClass = ClassUtils.getUserClass(handler);
+        AnnotationHandlerMethodResolver resolver = this.methodResolverCache.get(handlerClass);
+        if (resolver == null) {
+            
+            HandlerMethodResolver handlerMethodResolver = newHandlerMethodResolver(handlerClass);   
+            
+            resolver = new AnnotationHandlerMethodResolver(handlerClass, handlerMethodResolver);
+            resolver.init();
+            this.methodResolverCache.put(handlerClass, resolver);
+        }
+        return resolver;
+    }
 
-	HandlerMethodResolver newHandlerMethodResolver(Class<?> handlerClass) {
-		HandlerMethodResolver handlerMethodResolver = null;
-		Constructor<?> spring3Constructor = ReflectionUtils.findConstructor(HandlerMethodResolver.class, new Class[]{});
-		if (spring3Constructor != null) {
-			handlerMethodResolver = (HandlerMethodResolver) ReflectionUtils.invokeConstructor(spring3Constructor, new Object[0], false);
-			ReflectionUtils.invokeMethod(handlerMethodResolver, "init", handlerClass);
-		} else {
-			Constructor<?> spring25Constructor = ReflectionUtils.findConstructor(HandlerMethodResolver.class, new Class[]{ Class.class });
-			if (spring25Constructor != null) {
-				handlerMethodResolver = (HandlerMethodResolver) ReflectionUtils.invokeConstructor(spring25Constructor, new Object[] { handlerClass }, false);
-			}
-		}
-		return handlerMethodResolver;
-	}
-	
-	public void setCustomArgumentResolvers(WebArgumentResolver[] webArgumentResolvers) {
-		this.customArgumentResolvers = webArgumentResolvers;
-	}
+    HandlerMethodResolver newHandlerMethodResolver(Class<?> handlerClass) {
+        HandlerMethodResolver handlerMethodResolver = null;
+        Constructor<?> spring3Constructor = ReflectionUtils.findConstructor(HandlerMethodResolver.class, new Class[]{});
+        if (spring3Constructor != null) {
+            handlerMethodResolver = (HandlerMethodResolver) ReflectionUtils.invokeConstructor(spring3Constructor, new Object[0], false);
+            ReflectionUtils.invokeMethod(handlerMethodResolver, "init", handlerClass);
+        } else {
+            Constructor<?> spring25Constructor = ReflectionUtils.findConstructor(HandlerMethodResolver.class, new Class[]{ Class.class });
+            if (spring25Constructor != null) {
+                handlerMethodResolver = (HandlerMethodResolver) ReflectionUtils.invokeConstructor(spring25Constructor, new Object[] { handlerClass }, false);
+            }
+        }
+        return handlerMethodResolver;
+    }
+    
+    public void setCustomArgumentResolvers(WebArgumentResolver[] webArgumentResolvers) {
+        this.customArgumentResolvers = webArgumentResolvers;
+    }
 
 }

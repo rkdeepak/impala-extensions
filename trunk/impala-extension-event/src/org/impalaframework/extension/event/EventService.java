@@ -2,5 +2,5 @@ package org.impalaframework.extension.event;
 
 
 public interface EventService {
-	public void submitEvent(Event Event);
+    public void submitEvent(Event Event);
 }

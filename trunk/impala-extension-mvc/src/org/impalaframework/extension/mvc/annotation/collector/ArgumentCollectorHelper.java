@@ -35,78 +35,78 @@ import org.springframework.web.context.request.NativeWebRequest;
  * @author Phil Zoio
  */
 public class ArgumentCollectorHelper {
-	
-	private final WebArgumentResolver[] webArgumentResolvers;
+    
+    private final WebArgumentResolver[] webArgumentResolvers;
 
-	public ArgumentCollectorHelper(WebArgumentResolver[] webArgumentResolvers) {
-		this.webArgumentResolvers = webArgumentResolvers;
-	}
+    public ArgumentCollectorHelper(WebArgumentResolver[] webArgumentResolvers) {
+        this.webArgumentResolvers = webArgumentResolvers;
+    }
 
-	public ArgumentCollector getArgumentCollector(Method handlerMethod, NativeWebRequest webRequest, int index) {
-		
-		//FIXME test
-		
-		ArgumentCollector collector = null;
-		MethodParameter parameter = new MethodParameter(handlerMethod, index);
-		Annotation[] annotations = WebAnnotationUtils.getAnnotations(parameter, "getParameterAnnotations");
-			//parameter.getParameterAnnotations();
-		
-		Class<?> parameterType = parameter.getParameterType();
-		
-		Annotation annotation = null;
-		
-		if (annotations.length > 2) {
-			throw new IllegalStateException("Parameter with index " + index + " from method " + handlerMethod + " has more than one annotation");
-		}
-		
-		if (annotations.length == 1) {
-			annotation = annotations[0];
-		}
-		
-		if (annotation != null) {
-			
-			//FIXME test
-			
-			if (RequestParam.class.isInstance(annotation)) {
-				collector = new RequestParameterArgumentCollector((RequestParam)annotation, parameterType);
-			} else if (ModelAttribute.class.isInstance(annotation)) {
-				collector = new ModelAttributeArgumentCollector((ModelAttribute)annotation);
-			} else {
-				
-				if (webArgumentResolvers != null) {
-					for (WebArgumentResolver webArgumentResolver : webArgumentResolvers) {
-						
-						try {
-							Object resolveArgument = webArgumentResolver.resolveArgument(parameter, webRequest);
-							if (!WebArgumentResolver.UNRESOLVED.equals(resolveArgument)) {
-								collector = new CustomResolverArgumentCollector(webArgumentResolver, parameter);
-							}
-						}
-						catch (Exception e) {
-						}
-					}
-				}
-			}
-		} 
-		
-		if (collector == null) {
-			
-			//FIXME only handling from point of view of map
-			if (Map.class.isAssignableFrom(parameterType)) {
-				collector = new ModelArgumentCollector();
-			} else if (HttpServletRequest.class.isAssignableFrom(parameterType)) {
-				collector = new HttpServletRequestArgumentCollector();
-			} else if (HttpServletResponse.class.isAssignableFrom(parameterType)) {
-				collector = new HttpServletResponseArgumentCollector();
-			} else if (HttpSession.class.isAssignableFrom(parameterType)) {
-				collector = new HttpSessionArgumentCollector();
-			}
-		}
-		
-		if (collector == null) {
-			throw new IllegalStateException("Unable to determine parameter type for arameter with index " + index + " from method " + handlerMethod);
-		}
-		return collector;
-	}
+    public ArgumentCollector getArgumentCollector(Method handlerMethod, NativeWebRequest webRequest, int index) {
+        
+        //FIXME test
+        
+        ArgumentCollector collector = null;
+        MethodParameter parameter = new MethodParameter(handlerMethod, index);
+        Annotation[] annotations = WebAnnotationUtils.getAnnotations(parameter, "getParameterAnnotations");
+            //parameter.getParameterAnnotations();
+        
+        Class<?> parameterType = parameter.getParameterType();
+        
+        Annotation annotation = null;
+        
+        if (annotations.length > 2) {
+            throw new IllegalStateException("Parameter with index " + index + " from method " + handlerMethod + " has more than one annotation");
+        }
+        
+        if (annotations.length == 1) {
+            annotation = annotations[0];
+        }
+        
+        if (annotation != null) {
+            
+            //FIXME test
+            
+            if (RequestParam.class.isInstance(annotation)) {
+                collector = new RequestParameterArgumentCollector((RequestParam)annotation, parameterType);
+            } else if (ModelAttribute.class.isInstance(annotation)) {
+                collector = new ModelAttributeArgumentCollector((ModelAttribute)annotation);
+            } else {
+                
+                if (webArgumentResolvers != null) {
+                    for (WebArgumentResolver webArgumentResolver : webArgumentResolvers) {
+                        
+                        try {
+                            Object resolveArgument = webArgumentResolver.resolveArgument(parameter, webRequest);
+                            if (!WebArgumentResolver.UNRESOLVED.equals(resolveArgument)) {
+                                collector = new CustomResolverArgumentCollector(webArgumentResolver, parameter);
+                            }
+                        }
+                        catch (Exception e) {
+                        }
+                    }
+                }
+            }
+        } 
+        
+        if (collector == null) {
+            
+            //FIXME only handling from point of view of map
+            if (Map.class.isAssignableFrom(parameterType)) {
+                collector = new ModelArgumentCollector();
+            } else if (HttpServletRequest.class.isAssignableFrom(parameterType)) {
+                collector = new HttpServletRequestArgumentCollector();
+            } else if (HttpServletResponse.class.isAssignableFrom(parameterType)) {
+                collector = new HttpServletResponseArgumentCollector();
+            } else if (HttpSession.class.isAssignableFrom(parameterType)) {
+                collector = new HttpSessionArgumentCollector();
+            }
+        }
+        
+        if (collector == null) {
+            throw new IllegalStateException("Unable to determine parameter type for arameter with index " + index + " from method " + handlerMethod);
+        }
+        return collector;
+    }
 
 }

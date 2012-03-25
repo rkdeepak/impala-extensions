@@ -24,15 +24,15 @@ import org.springframework.web.context.request.NativeWebRequest;
  * @author Phil Zoio
  */
 public class ModelAttributeArgumentCollector implements ArgumentCollector {
-	
-	private String attributeName;
+    
+    private String attributeName;
 
-	public ModelAttributeArgumentCollector(ModelAttribute annotation) {
-		super();
-		attributeName = annotation.value();
-	}
+    public ModelAttributeArgumentCollector(ModelAttribute annotation) {
+        super();
+        attributeName = annotation.value();
+    }
 
-	public Object getArgument(NativeWebRequest request, ExtendedModelMap implicitModel, TypeConverter typeConverter) {
-		return implicitModel.get(attributeName);
-	}
+    public Object getArgument(NativeWebRequest request, ExtendedModelMap implicitModel, TypeConverter typeConverter) {
+        return implicitModel.get(attributeName);
+    }
 }

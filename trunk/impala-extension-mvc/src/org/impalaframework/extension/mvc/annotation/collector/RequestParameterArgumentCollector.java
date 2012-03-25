@@ -26,33 +26,33 @@ import org.springframework.web.context.request.NativeWebRequest;
  */
 public class RequestParameterArgumentCollector implements ArgumentCollector {
 
-	private RequestParam annotation;
-	
-	private Class<?> type;
+    private RequestParam annotation;
+    
+    private Class<?> type;
 
-	public RequestParameterArgumentCollector(RequestParam annotation, Class<?> type) {
-		super();
-		this.annotation = annotation;
-		this.type = type;
-	}
+    public RequestParameterArgumentCollector(RequestParam annotation, Class<?> type) {
+        super();
+        this.annotation = annotation;
+        this.type = type;
+    }
 
-	public Object getArgument(NativeWebRequest request, ExtendedModelMap implicitModel, TypeConverter typeConverter) {
-		String value = annotation.value();
-		boolean required = annotation.required();
-		
-		String parameter = request.getParameter(value);
-		
-		/*
-		if (!StringUtils.hasText(parameter)) {
-			parameter = annotation.defaultValue();
-		}*/
+    public Object getArgument(NativeWebRequest request, ExtendedModelMap implicitModel, TypeConverter typeConverter) {
+        String value = annotation.value();
+        boolean required = annotation.required();
+        
+        String parameter = request.getParameter(value);
+        
+        /*
+        if (!StringUtils.hasText(parameter)) {
+            parameter = annotation.defaultValue();
+        }*/
 
-		if (!StringUtils.hasText(parameter)) {
-			if (required) {
-				throw new IllegalArgumentException("Parameter '" + value + "' is required.");
-			}
-		}
-		
-		return typeConverter.convertIfNecessary(parameter, type);
-	}
+        if (!StringUtils.hasText(parameter)) {
+            if (required) {
+                throw new IllegalArgumentException("Parameter '" + value + "' is required.");
+            }
+        }
+        
+        return typeConverter.convertIfNecessary(parameter, type);
+    }
 }

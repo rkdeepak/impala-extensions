@@ -22,63 +22,63 @@ import org.springframework.util.Assert;
  * @author Phil Zoio
  */
 public class EventListenerContributor implements InitializingBean, DisposableBean {
-	
-	private static final Log logger = LogFactory.getLog(EventListenerContributor.class);
-	
-	private EventListenerRegistry registry;
-	
-	private Map<String, EventListener> contributedListeners;
+    
+    private static final Log logger = LogFactory.getLog(EventListenerContributor.class);
+    
+    private EventListenerRegistry registry;
+    
+    private Map<String, EventListener> contributedListeners;
 
-	public void afterPropertiesSet() throws Exception {
-		Assert.notNull(contributedListeners);
-		Assert.notNull(registry);
-		
-		Set<String> eventTypes = contributedListeners.keySet();
-		for (String eventType : eventTypes) {
-			String contributionType  = getType(eventType);
-			EventListener listener = contributedListeners.get(eventType);
-			
-			if (listener != null && logger.isDebugEnabled()) {
-				logger.debug("Contributing instance of " + listener.getClass().getName() + ", consumer '" + listener.getConsumerName() + "' for event type: " + eventType);
-			}
-			
-			registry.addListener(contributionType, listener);
-		}
-	}
+    public void afterPropertiesSet() throws Exception {
+        Assert.notNull(contributedListeners);
+        Assert.notNull(registry);
+        
+        Set<String> eventTypes = contributedListeners.keySet();
+        for (String eventType : eventTypes) {
+            String contributionType  = getType(eventType);
+            EventListener listener = contributedListeners.get(eventType);
+            
+            if (listener != null && logger.isDebugEnabled()) {
+                logger.debug("Contributing instance of " + listener.getClass().getName() + ", consumer '" + listener.getConsumerName() + "' for event type: " + eventType);
+            }
+            
+            registry.addListener(contributionType, listener);
+        }
+    }
 
-	public void destroy() throws Exception {
-		Set<String> eventTypes = contributedListeners.keySet();
-		for (String eventType : eventTypes) {
-			String contributionType  = getType(eventType);
-			EventListener listener = contributedListeners.get(eventType);
-			
-			if (listener != null && logger.isDebugEnabled()) {
-				logger.debug("Contributing instance of " + listener.getClass().getName() + ", consumer '" + listener.getConsumerName() + "' for event type: " + eventType);
-			}
-			
-			registry.removeListener(contributionType, listener);
-		}
-	}
+    public void destroy() throws Exception {
+        Set<String> eventTypes = contributedListeners.keySet();
+        for (String eventType : eventTypes) {
+            String contributionType  = getType(eventType);
+            EventListener listener = contributedListeners.get(eventType);
+            
+            if (listener != null && logger.isDebugEnabled()) {
+                logger.debug("Contributing instance of " + listener.getClass().getName() + ", consumer '" + listener.getConsumerName() + "' for event type: " + eventType);
+            }
+            
+            registry.removeListener(contributionType, listener);
+        }
+    }
 
-	String getType(String eventType) {
-		String type = null;
-		int dotIndex = eventType.indexOf('.');
-		if (dotIndex >= 0) {
-			type = eventType.substring(0, dotIndex);
-		} else {
-			type = eventType;
-		}
-		return type;
-	}
-	
-	/* ************************* Spring-wired setters ********************** */
+    String getType(String eventType) {
+        String type = null;
+        int dotIndex = eventType.indexOf('.');
+        if (dotIndex >= 0) {
+            type = eventType.substring(0, dotIndex);
+        } else {
+            type = eventType;
+        }
+        return type;
+    }
+    
+    /* ************************* Spring-wired setters ********************** */
 
-	public void setRegistry(EventListenerRegistry registry) {
-		this.registry = registry;
-	}
+    public void setRegistry(EventListenerRegistry registry) {
+        this.registry = registry;
+    }
 
-	public void setContributedListeners(Map<String, EventListener> contributedListeners) {
-		this.contributedListeners = contributedListeners;
-	}
+    public void setContributedListeners(Map<String, EventListener> contributedListeners) {
+        this.contributedListeners = contributedListeners;
+    }
 
 }

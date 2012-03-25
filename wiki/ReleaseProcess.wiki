@@ -34,6 +34,26 @@ project.version=1.0.2
 
 Commit the change if necessary.
 
+Fix the carriage returns and line feeds:
+
+{{{
+ant fixcrlf
+}}}
+
+Then commit any changes, if necessary.
+
 Manually tag the repository
 
 http://impala-extensions.googlecode.com/svn/wiki/images/tag.png
+
+Do build
+
+{{{
+ant clean dist test publishsignlocal
+}}}
+
+To deploy to Maven snapshots repository: http://oss.sonatype.org/index.html
+
+{{{
+ant deployremote
+}}}

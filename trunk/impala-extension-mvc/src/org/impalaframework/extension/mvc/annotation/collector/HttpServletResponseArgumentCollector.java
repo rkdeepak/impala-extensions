@@ -25,14 +25,14 @@ import org.springframework.web.context.request.NativeWebRequest;
  * @author Phil Zoio
  */
 public class HttpServletResponseArgumentCollector implements ArgumentCollector {
-	
-	public HttpServletResponseArgumentCollector() {
-		super();
-	}
+    
+    public HttpServletResponseArgumentCollector() {
+        super();
+    }
 
-	public Object getArgument(NativeWebRequest request, ExtendedModelMap implicitModel, TypeConverter typeConverter) {
-		//FIXME test
-		return (HttpServletResponse)request.getNativeResponse();
-	}
+    public Object getArgument(NativeWebRequest request, ExtendedModelMap implicitModel, TypeConverter typeConverter) {
+        //FIXME test
+        return (HttpServletResponse)request.getNativeResponse();
+    }
 
 }

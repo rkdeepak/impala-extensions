@@ -34,30 +34,30 @@ import org.springframework.web.context.request.NativeWebRequest;
  */
 public class RequestParameterMapArgumentResolver extends BaseAttributeArgumentResolver {
 
-	protected String getAttribute(Object paramAnn) {
-		if (RequestParameterMap.class.isInstance(paramAnn)) {
-			return "found";
-		}
-		return null;
-	}
+    protected String getAttribute(Object paramAnn) {
+        if (RequestParameterMap.class.isInstance(paramAnn)) {
+            return "found";
+        }
+        return null;
+    }
 
-	@SuppressWarnings("unchecked")
-	protected Object getValue(NativeWebRequest webRequest, String encoding) {
-		
-		Object nativeRequest = webRequest.getNativeRequest();
-		if (nativeRequest instanceof HttpServletRequest) {
-			HttpServletRequest req = (HttpServletRequest) nativeRequest;
+    @SuppressWarnings("unchecked")
+    protected Object getValue(NativeWebRequest webRequest, String encoding) {
+        
+        Object nativeRequest = webRequest.getNativeRequest();
+        if (nativeRequest instanceof HttpServletRequest) {
+            HttpServletRequest req = (HttpServletRequest) nativeRequest;
 
-			Map<String,String> parameters = new HashMap<String,String>();
-			final Enumeration<String> parameterNames = req.getParameterNames();
-			while(parameterNames.hasMoreElements()) {
-				String parameterName = parameterNames.nextElement();
-				String parameterValue = req.getParameter(parameterName);
-				parameters.put(parameterName, parameterValue);
-			}
-			return parameters;
-		}
-		return null;
-	}
+            Map<String,String> parameters = new HashMap<String,String>();
+            final Enumeration<String> parameterNames = req.getParameterNames();
+            while(parameterNames.hasMoreElements()) {
+                String parameterName = parameterNames.nextElement();
+                String parameterValue = req.getParameter(parameterName);
+                parameters.put(parameterName, parameterValue);
+            }
+            return parameters;
+        }
+        return null;
+    }
 
 }

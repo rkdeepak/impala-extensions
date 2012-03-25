@@ -30,27 +30,27 @@ import org.springframework.web.context.request.WebRequest;
  */
 public class FlashAttributeArgumentResolver extends BaseAttributeArgumentResolver {
 
-	protected String getAttribute(Object paramAnn) {
-		String sessionAttribute = null;
-		if (FlashAttribute.class.isInstance(paramAnn)) {
-			FlashAttribute attribute = (FlashAttribute) paramAnn;
-			sessionAttribute = attribute.value();
-		}
-		return sessionAttribute;
-	}
+    protected String getAttribute(Object paramAnn) {
+        String sessionAttribute = null;
+        if (FlashAttribute.class.isInstance(paramAnn)) {
+            FlashAttribute attribute = (FlashAttribute) paramAnn;
+            sessionAttribute = attribute.value();
+        }
+        return sessionAttribute;
+    }
 
-	protected Object getValue(NativeWebRequest webRequest, String attributeName) {
-		Object attribute = webRequest.getAttribute(attributeName, WebRequest.SCOPE_SESSION);
-		
-		if (attribute != null && isArgumentPending(webRequest)) {
-			webRequest.removeAttribute(attributeName, WebRequest.SCOPE_SESSION);
-		}
-		
-		return attribute;
-	}
+    protected Object getValue(NativeWebRequest webRequest, String attributeName) {
+        Object attribute = webRequest.getAttribute(attributeName, WebRequest.SCOPE_SESSION);
+        
+        if (attribute != null && isArgumentPending(webRequest)) {
+            webRequest.removeAttribute(attributeName, WebRequest.SCOPE_SESSION);
+        }
+        
+        return attribute;
+    }
 
-	private boolean isArgumentPending(NativeWebRequest webRequest) {
-		return webRequest.getAttribute(WebAnnotationUtils.ARGUMENT_PENDING, WebRequest.SCOPE_REQUEST) == null;
-	}
+    private boolean isArgumentPending(NativeWebRequest webRequest) {
+        return webRequest.getAttribute(WebAnnotationUtils.ARGUMENT_PENDING, WebRequest.SCOPE_REQUEST) == null;
+    }
 
 }

@@ -21,6 +21,7 @@
 	<import file = "${impala.home}/mvn-build.xml"/>
 	<import file = "${impala.home}/execution-build.xml"/>
 	
+    <target name = "fixcrlf" depends = "shared:fixcrlf" description="Fixes carriage returns and line feeds, using Unix line endings"/>
 	<target name = "get" depends = "shared:get" description="Gets project dependencies as in dependencies.txt"/>
 	<target name = "fetch" depends = "repository:fetch-impala" description="Fetches Impala libraries"/>
 	<target name = "clean" depends = "shared:clean" description="Cleans all projects"/>

@@ -29,22 +29,22 @@ import org.springframework.web.context.request.NativeWebRequest;
  */
 public class RequestHeaderArgumentResolver extends BaseAttributeArgumentResolver {
 
-	protected String getAttribute(Object paramAnn) {
-		String attributeName = null;
-		if (RequestHeader.class.isInstance(paramAnn)) {
-			RequestHeader attribute = (RequestHeader) paramAnn;
-			attributeName = attribute.value();
-		}
-		return attributeName;
-	}
+    protected String getAttribute(Object paramAnn) {
+        String attributeName = null;
+        if (RequestHeader.class.isInstance(paramAnn)) {
+            RequestHeader attribute = (RequestHeader) paramAnn;
+            attributeName = attribute.value();
+        }
+        return attributeName;
+    }
 
-	protected Object getValue(NativeWebRequest webRequest, String headerName) {
-		Object nativeRequest = webRequest.getNativeRequest();
-		if (nativeRequest instanceof HttpServletRequest) {
-			HttpServletRequest req = (HttpServletRequest) nativeRequest;
-			return req.getHeader(headerName);
-		}
-		return null;
-	}
+    protected Object getValue(NativeWebRequest webRequest, String headerName) {
+        Object nativeRequest = webRequest.getNativeRequest();
+        if (nativeRequest instanceof HttpServletRequest) {
+            HttpServletRequest req = (HttpServletRequest) nativeRequest;
+            return req.getHeader(headerName);
+        }
+        return null;
+    }
 
 }

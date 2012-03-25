@@ -28,18 +28,18 @@ import org.springframework.web.context.request.WebRequest;
  */
 public class SessionAttributeArgumentResolver extends BaseAttributeArgumentResolver {
 
-	protected String getAttribute(Object paramAnn) {
-		String sessionAttribute = null;
-		if (SessionAttribute.class.isInstance(paramAnn)) {
-			SessionAttribute attribute = (SessionAttribute) paramAnn;
-			sessionAttribute = attribute.value();
-		}
-		return sessionAttribute;
-	}
+    protected String getAttribute(Object paramAnn) {
+        String sessionAttribute = null;
+        if (SessionAttribute.class.isInstance(paramAnn)) {
+            SessionAttribute attribute = (SessionAttribute) paramAnn;
+            sessionAttribute = attribute.value();
+        }
+        return sessionAttribute;
+    }
 
-	protected Object getValue(NativeWebRequest webRequest, String attributeName) {
-		Object attribute = webRequest.getAttribute(attributeName, WebRequest.SCOPE_SESSION);
-		return attribute;
-	}
+    protected Object getValue(NativeWebRequest webRequest, String attributeName) {
+        Object attribute = webRequest.getAttribute(attributeName, WebRequest.SCOPE_SESSION);
+        return attribute;
+    }
 
 }

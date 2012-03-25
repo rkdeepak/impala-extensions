@@ -24,6 +24,6 @@ import org.springframework.web.context.request.NativeWebRequest;
  */
 public interface ArgumentCollector {
 
-	public Object getArgument(NativeWebRequest request, ExtendedModelMap implicitModel, TypeConverter typeConverter);
-	
+    public Object getArgument(NativeWebRequest request, ExtendedModelMap implicitModel, TypeConverter typeConverter);
+    
 }

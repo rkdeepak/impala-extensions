@@ -2,6 +2,6 @@ package org.impalaframework.extension.root;
 
 public interface MessageService {
 
-	public String getMessage();
-	
+    public String getMessage();
+    
 }

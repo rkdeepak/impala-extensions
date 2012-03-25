@@ -8,36 +8,36 @@ import java.util.List;
  */
 public interface EventListenerRegistry {
 
-	/**
-	 * Clear event listeners. {@link #getListenerCount()} should return zero after this has been called
-	 */
-	void clear();
+    /**
+     * Clear event listeners. {@link #getListenerCount()} should return zero after this has been called
+     */
+    void clear();
 
-	/**
-	 * Adds listener for a particular event type
-	 * @see EventType#getType()
-	 */
-	void addListener(String eventType, EventListener listener);
+    /**
+     * Adds listener for a particular event type
+     * @see EventType#getType()
+     */
+    void addListener(String eventType, EventListener listener);
 
-	/**
-	 * Removes listeners for a particular event type
-	 * @see EventType#getType()
-	 */
-	boolean removeListener(String eventTypeName, EventListener listener);
+    /**
+     * Removes listeners for a particular event type
+     * @see EventType#getType()
+     */
+    boolean removeListener(String eventTypeName, EventListener listener);
 
-	/**
-	 * Returns all the event listeners for a particular event type
-	 */
-	List<EventListener> getEventListeners(String eventTypeName);
+    /**
+     * Returns all the event listeners for a particular event type
+     */
+    List<EventListener> getEventListeners(String eventTypeName);
 
-	/**
-	 * Gets the total number of listeners managed by this {@link EventListenerRegistry} instance
-	 */
-	int getListenerCount();
+    /**
+     * Gets the total number of listeners managed by this {@link EventListenerRegistry} instance
+     */
+    int getListenerCount();
 
-	/**
-	 * Gets the listeners registered for a particular event type
-	 */
-	int getListenerCountForType(String type);
+    /**
+     * Gets the listeners registered for a particular event type
+     */
+    int getListenerCountForType(String type);
 
 }
