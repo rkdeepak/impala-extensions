@@ -11,6 +11,7 @@
 	<property file = "build.properties"/>
 	<property file = "shared.properties"/>
 	<property file = "web.properties"/>
+	<property file = "mvn.properties"/>
 	
 	<import file = "${impala.home}/project-build.xml"/>
 	<import file = "${impala.home}/shared-build.xml"/>
