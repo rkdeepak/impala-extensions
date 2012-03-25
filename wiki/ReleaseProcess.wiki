@@ -42,11 +42,7 @@ ant fixcrlf
 
 Then commit any changes, if necessary.
 
-Manually tag the repository
-
-http://impala-extensions.googlecode.com/svn/wiki/images/tag.png
-
-Do build
+Do build with signed artifacts
 
 {{{
 ant clean dist test publishsignlocal
@@ -59,3 +55,7 @@ ant -Dmaven.release=true mvnsigndeploy
 }}}
 
 See [https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-11.WhatDoPeopleThinkAboutOSSRH documentation on how to promote release].
+
+Finally, manually tag the repository
+
+http://impala-extensions.googlecode.com/svn/wiki/images/tag.png
