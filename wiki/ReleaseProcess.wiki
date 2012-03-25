@@ -1,0 +1,26 @@
+#summary Release Process
+
+== Snapshot build ==
+
+Make sure that in _shared.properties_
+that project version ends with `SNAPSHOT`, e.g.
+
+{{{
+project.version=1.0.2-SNAPSHOT
+}}}
+
+Do build
+
+{{{
+ant clean dist test publishlocal
+}}}
+
+To deploy to Maven snapshots repository: http://oss.sonatype.org/index.html
+
+{{{
+ant deployremote
+}}}
+
+== Release build ==
+
+Manually create tag
