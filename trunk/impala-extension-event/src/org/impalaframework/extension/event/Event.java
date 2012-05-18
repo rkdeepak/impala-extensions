@@ -58,6 +58,11 @@ public class Event implements Serializable, Comparable<Event> {
      * The expected process by date. Used for priority ordering
      */
     private final Date processedByDate;
+    
+    /**
+     * Holds authentication data associated with the event
+     */
+    private final Object authenticationData;
 
     public Event(
             EventType eventType, 
@@ -65,7 +70,9 @@ public class Event implements Serializable, Comparable<Event> {
             String subjectId,
             String entity,  
             Serializable currentData, 
-            String persistentData, Date date) {
+            String persistentData, 
+            Date date, 
+            Object authenticationData) {
         super();
         this.user = user;
         this.subjectId = subjectId;
@@ -75,10 +82,15 @@ public class Event implements Serializable, Comparable<Event> {
         this.persistentData = persistentData;
         this.dateTime = date;
         this.processedByDate = processedByDate(eventType, dateTime);
+        this.authenticationData = authenticationData;
+    }
+    
+    public Event(EventType eventType, String user, String subjectId, String entity) {
+        this(eventType, user, subjectId, entity, null, null, new Date(), null);
     }
 
-    public Event(EventType eventType, String user, String subjectId, String entity) {
-        this(eventType, user, subjectId, entity, null, null, new Date());
+    public Event(EventType eventType, String user, String subjectId, String entity, Object authenticationData) {
+        this(eventType, user, subjectId, entity, null, null, new Date(), authenticationData);
     }
     
     private Date processedByDate(EventType eventType, Date dateTime) {
@@ -126,6 +138,10 @@ public class Event implements Serializable, Comparable<Event> {
         return processedByDate;
     }
 
+    public Object getAuthenticationData() {
+		return authenticationData;
+	}
+    
     @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer(500);
