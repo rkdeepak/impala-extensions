@@ -3,7 +3,9 @@ package org.impalaframework.extension.event;
 import org.joda.time.Period;
 
 /**
- * Represents the type of an {@link Event}, against which listeners will register
+ * Represents the type of an {@link Event}, against which listeners will be
+ * registered
+ * 
  * @author Phil Zoio
  */
 public class EventType {
@@ -19,6 +21,13 @@ public class EventType {
      * A flag indicating that the event should be persisted
      */
     final private boolean persistent;
+    
+    /**
+     * Applies for asynchronous events, as synchronous events are automatically transactional.
+     * If transactional, and event is fired in the context of a transaction, event will only be fired 
+     * on successful completion of transaction
+     */
+    final private boolean transactional;
 
     /**
      * The delay that ordinarily should not be exceeded before the event is processed
@@ -36,11 +45,12 @@ public class EventType {
         this.type = type;
         this.persistent = true;
         this.handleInProcess = true;
+        this.transactional = false;
         this.targetDelay = defaultTargetDelay;
 
     }
 
-    public EventType(String type, boolean persist, boolean handleInProcess, Period targetDelay) {
+    public EventType(String type, boolean persist, boolean handleInProcess, boolean transactional, Period targetDelay) {
         super();
 
         if (!persist && !handleInProcess) {
@@ -51,6 +61,7 @@ public class EventType {
         this.type = type;
         this.persistent = persist;
         this.handleInProcess = handleInProcess;
+        this.transactional = transactional;
 
         if (targetDelay != null) {
             this.targetDelay = targetDelay;
@@ -60,6 +71,10 @@ public class EventType {
         }
 
     }
+    
+    public boolean isTransactional() {
+		return transactional;
+	}
 
     public boolean isHandleInProcess() {
         return handleInProcess;

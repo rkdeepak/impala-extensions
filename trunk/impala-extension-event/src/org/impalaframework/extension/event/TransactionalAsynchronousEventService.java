@@ -13,16 +13,55 @@ public class TransactionalAsynchronousEventService extends AsynchronousEventServ
     
     private static final Log logger = LogFactory.getLog(TransactionalAsynchronousEventService.class);
     
-    //FIXME write unit tests for this.
-    
+    /**
+     * Submits event immediately if event is not transactional or event transaction is not active
+     */
     @Override
     protected void doSubmitEvent(Event event) {
-        if (!TransactionSynchronizationManager.isSynchronizationActive()) {
-            addEventToQueue(event);
+    	
+    	boolean waitingForTransaction = waitingForTransaction(event);
+		
+		if (!waitingForTransaction) {
+            this.addEventToQueue(event);
         } else {
             TransactionSynchronizationManager.registerSynchronization(new EventTransactionSynchronization(event));
         }
     }
+
+    /**
+     * Returns true if synchronization is active and event type is transactional
+     * @see #synchronizationActive()
+     * @see #eventIsTransactional(Event)
+     */
+	boolean waitingForTransaction(Event event) {
+		boolean transactional = eventIsTransactional(event);
+        boolean waitingForTransaction = transactional && synchronizationActive();
+		return waitingForTransaction;
+	}
+	
+	/**
+	 * Returns true if event's type is transactional
+	 */
+	boolean eventIsTransactional(Event event) {
+		EventType eventType = event.getEventType();
+		boolean transactional = eventType.isTransactional();
+		if (logger.isDebugEnabled()) {
+			logger.debug(String.format("Event '%s' is transactional: %s", eventType, transactional));
+		}
+		return transactional;
+	}
+
+	/**
+	 * Returns true if transaction synchronization is active
+	 * @see TransactionSynchronizationManager#isSynchronizationActive()
+	 */
+	boolean synchronizationActive() {
+		boolean synchronizationActive = TransactionSynchronizationManager.isSynchronizationActive();
+		if (logger.isDebugEnabled()) {
+			logger.debug("Synchronization active: " + synchronizationActive);
+		}
+		return synchronizationActive;
+	}
     
     class EventTransactionSynchronization extends TransactionSynchronizationAdapter {
         
