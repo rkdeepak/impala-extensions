@@ -34,16 +34,16 @@ public class DefaultEventServiceTest extends TestCase {
         boolean inprocess = false;
         
         EventType eventType = new EventType("mytype", persist, inprocess, new Period().withSeconds(10));
-        Event Event = new Event(eventType, "user", "1", "type");
+        Event event = new Event(eventType, "user", "1", "type");
 
         //expectations
-        eventDAO.insertEvent(Event);
+        eventDAO.insertEvent(event);
         
         replay(synchEventService);
         replay(eventDAO);
         replay(asynchEventService);
     
-        service.submitEvent(Event);
+        service.submitEvent(event);
 
         verify(synchEventService);
         verify(eventDAO);
