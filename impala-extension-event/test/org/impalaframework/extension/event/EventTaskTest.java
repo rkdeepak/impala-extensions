@@ -19,6 +19,7 @@ public class EventTaskTest extends TestCase {
     public void testAsynchronous() throws Exception {
         EventListener eventListener = new AsyncTestEventListener(false);
         final EventTask eventTask = new EventTask(event, eventListener);
+        System.out.println(eventTask);
         
         Thread.sleep(200);
     }

@@ -33,7 +33,7 @@ public class DefaultEventServiceTest extends TestCase {
         boolean persist = true;
         boolean inprocess = false;
         
-        EventType eventType = new EventType("mytype", persist, inprocess, new Period().withSeconds(10));
+        EventType eventType = new EventType("mytype", persist, inprocess, false, new Period().withSeconds(10));
         Event event = new Event(eventType, "user", "1", "type");
 
         //expectations
@@ -55,7 +55,7 @@ public class DefaultEventServiceTest extends TestCase {
         boolean persist = false;
         boolean inprocess = true;
         
-        EventType eventType = new EventType("mytype", persist, inprocess, new Period().withSeconds(10));
+        EventType eventType = new EventType("mytype", persist, inprocess, false, new Period().withSeconds(10));
         Event Event = new Event(eventType, "user", "1", "type");
 
         //expectations
@@ -78,7 +78,7 @@ public class DefaultEventServiceTest extends TestCase {
         boolean persist = true;
         boolean inprocess = true;
         
-        EventType eventType = new EventType("mytype", persist, inprocess, new Period().withSeconds(10));
+        EventType eventType = new EventType("mytype", persist, inprocess, false, new Period().withSeconds(10));
         Event Event = new Event(eventType, "user", "1", "type");
 
         //expectations
