@@ -25,8 +25,8 @@ public class RecordingEventTaskFactory implements EventTaskFactory {
         this.eventDAO = eventDAO;
     }
     
-    public EventTask newEventTask(Event Event, EventListener eventListener) {
-        return new RecordingEventTask(transactionManager, eventDAO, Event, eventListener);
+    public EventTask newEventTask(Event event, EventListener eventListener) {
+        return new RecordingEventTask(transactionManager, eventDAO, event, eventListener);
     }
     
     /* *************************** Protected methods for use by subclasses ******************** */

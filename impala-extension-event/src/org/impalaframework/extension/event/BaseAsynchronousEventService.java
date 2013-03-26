@@ -260,9 +260,9 @@ public abstract class BaseAsynchronousEventService implements EventService, Init
         logger.error("Failed to successfully perform event processing using listener: " + eventListener.getConsumerName(), e);
     }
 
-    protected EventTask newEventTask(Event Event, EventListener eventListener) {
+    protected EventTask newEventTask(Event event, EventListener eventListener) {
         Assert.notNull(eventTaskFactory);
-        EventTask eventTask = eventTaskFactory.newEventTask(Event, eventListener);
+        EventTask eventTask = eventTaskFactory.newEventTask(event, eventListener);
         return eventTask;
     }
 
