@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.impalaframework.exception.ExecutionException;
 import org.impalaframework.extension.mvc.annotation.WebAnnotationUtils;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -82,7 +83,11 @@ public class ArgumentCollectorHelper {
                                 collector = new CustomResolverArgumentCollector(webArgumentResolver, parameter);
                             }
                         }
+                        catch (RuntimeException e) {
+                        	throw e;
+                        }
                         catch (Exception e) {
+                        	throw new ExecutionException(e.getMessage());
                         }
                     }
                 }
