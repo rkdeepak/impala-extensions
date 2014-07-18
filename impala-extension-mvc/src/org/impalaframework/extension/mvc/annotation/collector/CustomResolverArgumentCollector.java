@@ -38,9 +38,11 @@ public class CustomResolverArgumentCollector implements ArgumentCollector {
     }
 
     public Object getArgument(NativeWebRequest webRequest, ExtendedModelMap implicitModel, TypeConverter typeConverter) {
-        //FIXME test
         try {
             return customResolver.resolveArgument(methodParameter, webRequest);
+        }
+        catch (RuntimeException e) {
+            throw e;
         }
         catch (Exception e) {
             throw new RuntimeException(e.getMessage(), e);

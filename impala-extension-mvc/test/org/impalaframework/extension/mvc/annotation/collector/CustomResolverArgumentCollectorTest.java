@@ -21,10 +21,17 @@ import org.impalaframework.extension.mvc.annotation.resolver.RequestAttributeArg
 import org.springframework.core.MethodParameter;
 
 public class CustomResolverArgumentCollectorTest extends BaseArgumentCollectorTest {
+	
+	private CustomResolverArgumentCollector collector;
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+	}
 
     public void testGetArgument() {
         MethodParameter methodParameter = getMethodParameter(CustomResolverTestClass.class, "method1", Long.class);
-        CustomResolverArgumentCollector collector = new CustomResolverArgumentCollector(new RequestAttributeArgumentResolver(), methodParameter);
+        collector = new CustomResolverArgumentCollector(new RequestAttributeArgumentResolver(), methodParameter);
         
         expect(request.getAttribute("param1", 0)).andReturn(1L);
         
